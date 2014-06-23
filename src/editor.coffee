@@ -181,9 +181,10 @@ Editor.toolbar = [
   {name: 'ordered-list', action: toggleOrderedList}
   '|'
   {name: 'link', action: drawLink}
-  {name: 'image', action: drawImage}
+  # {name: 'image', action: drawImage}
   '|'
-  {name: 'info', action: 'http://lab.lepture.com/editor/markdown'}
+  # {name: 'info', action: 'http://lab.lepture.com/editor/markdown'}
   {name: 'preview', action: togglePreview}
-  {name: 'fullscreen', action: toggleFullScreen}
+
+  # {name: 'fullscreen', action: toggleFullScreen}
 ]
