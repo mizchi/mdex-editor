@@ -1,19 +1,3 @@
-toolbar = [
-  {name: 'bold', action: toggleBold}
-  {name: 'italic', action: toggleItalic}
-  '|'
-  {name: 'quote', action: toggleBlockquote}
-  {name: 'unordered-list', action: toggleUnOrderedList}
-  {name: 'ordered-list', action: toggleOrderedList}
-  '|'
-  {name: 'link', action: drawLink}
-  {name: 'image', action: drawImage}
-  '|'
-  {name: 'info', action: 'http://lab.lepture.com/editor/markdown'}
-  {name: 'preview', action: togglePreview}
-  {name: 'fullscreen', action: toggleFullScreen}
-]
-
 class Editor
   @markdown: (text) -> marked(text)
 
@@ -55,8 +39,7 @@ class Editor
     @options = options
 
     # If user has passed an element, it should auto rendered
-    if @element
-      @render()
+    if @element then @render()
 
   render: (el) ->
     unless el
