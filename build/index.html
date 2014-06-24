@@ -36,6 +36,15 @@
     </div>
 
     <script type="text/javascript">
+      var el = document.createElement('span')
+      el.innerText = 'hello';
+      var myButton = {
+        el: el,
+        action: function(){
+          console.log('hello');
+        }
+      }
+
       var editor = new Mdex({
         editorTarget: '#editor',
         previewTarget: '#preview',
@@ -49,6 +58,8 @@
           '|',
           {name: 'link',           action: Mdex.drawLink},
           {name: 'image',          action: Mdex.drawImage},
+          '|',
+          myButton
         ]
       });
       editor.render();

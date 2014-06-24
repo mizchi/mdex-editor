@@ -1,13 +1,15 @@
 # mdex
 
-Extended markdown editor forked by `lepture/editor`
+Extended markdown editor: fork of `lepture/editor`
 
 ![](http://i.gyazo.com/0a0a03293b804fd2c275e63aa7561591.png)
 
 ## Features
 
+- Real time preview
+- Adding Custome buttons
 - Rewriten by CoffeeScript
-- Realtime preview
+- Easy to build by gulp
 
 ## Requirements
 
@@ -18,7 +20,17 @@ Extended markdown editor forked by `lepture/editor`
 
 ## Usage
 
-See `build` directory.
+I'll fix to make it easier to load later.
+
+1. load javascript dependencies
+2. Put `icomoon` to your assets root (Fix later!)
+3. load `build/mdex.js`
+4. load `build/mdex.css`
+
+See `build` directory in detail.
+
+
+Prepare html
 
 ```html
 <div class="mdex-container">
@@ -29,6 +41,8 @@ See `build` directory.
 </div>
 ```
 
+Instantiate
+
 ```javascript
 var editor = new Editor({
   editorTarget: '#editor',
@@ -36,7 +50,7 @@ var editor = new Editor({
   toolbar: [
     {name: 'bold',           action: Editor.toggleBold},
     {name: 'italic',         action: Editor.toggleItalic},
-    '|',
+    '|', // splitter
     {name: 'quote',          action: Editor.toggleBlockquote},
     {name: 'unordered-list', action: Editor.toggleUnOrderedList},
     {name: 'ordered-list',   action: Editor.toggleOrderedList},
@@ -48,7 +62,33 @@ var editor = new Editor({
 editor.render();
 ```
 
-TODO: easy custom button
+## Custom Button
+
+You can add raw HTML element to toolbar.
+
+```javascript
+// create element to add
+var el = document.createElement('span')
+el.innerText = 'hello';
+
+var myButton = {
+  el: el,
+  action: function(){
+    console.log('hello');
+  }
+};
+
+var editor = new Mdex({
+  editorTarget: '#editor',
+  previewTarget: '#preview',
+  toolbar: [myButton]
+});
+editor.render();
+```
+
+Codemirror instance exists `editor.codemirror`.
+
+(I tried many wysiwyg editor but most of them locked me strongly...)
 
 ## Development
 

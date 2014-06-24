@@ -360,6 +360,8 @@ class Mdex
           createIcon(item.name, item)
         else if item is '|'
           createSep()
+        else if item.el
+          item.el
         else
           createIcon(item)
 
