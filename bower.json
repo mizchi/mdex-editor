@@ -1,0 +1,21 @@
+{
+  "name": "mdex-editor",
+  "version": "0.0.0",
+  "homepage": "https://github.com/mizchi/mdex-editor",
+  "authors": [
+    "Koutarou Chikuba <miz404@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "codemirror": "~4.3.0",
+    "marked": "~0.3.2",
+    "icomoon": "~0.0.1"
+  }
+}

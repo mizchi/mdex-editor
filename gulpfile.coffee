@@ -4,6 +4,7 @@ rename     = require 'gulp-rename'
 watch      = require 'gulp-watch'
 plumber    = require 'gulp-plumber'
 connect    = require 'connect'
+concat     = require 'gulp-concat'
 
 gulp.task 'coffee', ->
   gulp
@@ -25,3 +26,14 @@ gulp.task 'dev', ['server'], ->
   gulp.watch('src/**/*.coffee', ['coffee'])
 
 gulp.task 'default', ['coffee']
+
+gulp.task 'concat', ->
+  gulp.src [
+    './bower_components/marked/lib/marked.js'
+    './bower_components/codemirror/lib/codemirror.js'
+    './bower_components/codemirror/addon/edit/continuelist.js'
+    './bower_components/codemirror/mode/markdown/markdown.js'
+    './bower_components/codemirror/mode/xml/xml.js'
+    ]
+  .pipe concat('vendor.js')
+  .pipe gulp.dest('./build/')
