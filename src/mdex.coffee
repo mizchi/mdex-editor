@@ -287,6 +287,12 @@ class Editor
     if options.element
       @element = options.element
 
+    if options.previewTarget
+      @previewTarget = options.previewTarget
+
+    if options.editorTarget
+      @editorTarget = options.editorTarget
+
     options.toolbar = options.toolbar ? Editor.toolbar
     # you can customize toolbar with object
     # [{name: 'bold', shortcut: 'Ctrl-B', className: 'icon-bold'}]
@@ -301,7 +307,7 @@ class Editor
 
   render: (el) ->
     unless el
-      el = @element ? document.getElementsByTagName('textarea')[0]
+      el = document.querySelector(@editorTarget)
 
     if @_rendered and @_rendered is el
       # Already rendered.
@@ -332,6 +338,11 @@ class Editor
       @createStatusbar()
 
     @_rendered = @element
+
+    if @previewTarget
+      $preview = $(@previewTarget)
+      @codemirror.on 'update', =>
+        $preview.html(marked(@codemirror.getValue()))
 
   createToolbar: (items) ->
     items = items ? @options.toolbar

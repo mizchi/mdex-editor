@@ -8,13 +8,13 @@ concat     = require 'gulp-concat'
 
 gulp.task 'coffee', ->
   gulp
-    .src 'src/editor.coffee', read: false
+    .src 'src/mdex.coffee', read: false
     .pipe plumber()
     .pipe browserify
       transform: ['coffeeify']
       extensions: ['.coffee']
       debug: true
-    .pipe rename 'mdex-editor.js'
+    .pipe rename 'mdex.js'
     .pipe gulp.dest './build'
 
 gulp.task 'server', (next) ->
@@ -22,12 +22,12 @@ gulp.task 'server', (next) ->
     .use connect.static './build'
     .listen 3456, next
 
-gulp.task 'dev', ['server'], ->
+gulp.task 'dev', ['concat-js'], ->
   gulp.watch('src/**/*.coffee', ['coffee'])
 
-gulp.task 'default', ['coffee']
+gulp.task 'default', ['concat-js', 'coffee']
 
-gulp.task 'concat', ->
+gulp.task 'concat-js', ->
   gulp.src [
     './bower_components/marked/lib/marked.js'
     './bower_components/codemirror/lib/codemirror.js'

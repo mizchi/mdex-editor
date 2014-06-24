@@ -1,22 +1,36 @@
-# Qcreate Editor: prototype version 2
+# mdex
 
-## Basic Usage
+extended markdown editor
 
-```js
-var editor = new Editor();
+## Usage
+
+```html
+<div class="mdex-container">
+  <div class="mdex-editor-container">
+    <textarea id="editor" placeholder="Content here ...."></textarea>
+  </div>
+  <div id='preview'></div>
+</div>
+```
+
+```javascript
+var editor = new Editor({
+  editorTarget: '#editor',
+  previewTarget: '#preview'
+});
 editor.render();
 ```
 
 ## Development
 
 ```
-$ npm install
-$ npm install grunt-cli -g
-$ grunt
+$ npm install gulp -g
+$ gulp
 ```
 
 ## License
 
+Copyright (c) 2014 by Koutaro Chikuba
 Copyright (c) 2013 - 2014 by Hsiaoming Yang
 
 Permission is hereby granted, free of charge to any noncommercial projects (paid for commercial support), including the rights to use, copy, modify, merge of the Software. Limitation of the rights to publish, distribute, and/or sell copies of the Software.
