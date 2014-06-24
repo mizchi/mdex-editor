@@ -342,7 +342,15 @@ class Mdex
     if @previewTarget
       $preview = $(@previewTarget)
       @codemirror.on 'update', =>
-        $preview.html(marked(@codemirror.getValue()))
+        $preview.html @onPreviewUpdate(@codemirror.getValue())
+
+  onPreviewUpdate: (text) ->
+    marked(text)
+
+  getCodemirror: -> @codemirror
+
+  getContent: ->
+    @getCodemirror().getValue()
 
   createToolbar: (items) ->
     items = items ? @options.toolbar
