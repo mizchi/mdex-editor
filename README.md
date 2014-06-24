@@ -13,10 +13,10 @@ Extended markdown editor: fork of `lepture/editor`
 
 ## Requirements
 
-- jQuery
-- CodeMirror
-- marked
-- icomoon
+- [jQuery](http://jquery.com/ "jQuery")
+- [CodeMirror](http://codemirror.net/ "CodeMirror")
+- [marked](https://github.com/chjj/marked/ "marked")
+- [IcoMoon](http://icomoon.io/ "IcoMoon")
 
 ## Usage
 
