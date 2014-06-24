@@ -92,8 +92,11 @@ Codemirror instance exists `editor.codemirror`.
 
 ## Development
 
-```sh
-$ npm install gulp -g
+require: gulp and bower
+
+```
+$ npm install
+$ bower install
 $ gulp dev
 $ open build/index.html
 ```
