@@ -332,21 +332,12 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
 }
 
 /* editor wrapper */
-body {
-  padding: 0;
-  margin: 0;
-  background-color: #f9f9f7;
-}
 .mdex-container {
   max-width: 800px;
   padding: 10px;
   margin: 10px auto;
 }
-.mdex-editor-wrapper {
+.mdex-editor-container {
   float: left;
   width: 450px;
-}
-.preview {
-  float: left;
-  width: 300px;
 }

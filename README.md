@@ -7,7 +7,7 @@ extended markdown editor
 ```html
 <div class="mdex-container">
   <div class="mdex-editor-container">
-    <textarea id="editor" placeholder="Content here ...."></textarea>
+    <textarea id="editor"></textarea>
   </div>
   <div id='preview'></div>
 </div>
@@ -16,7 +16,18 @@ extended markdown editor
 ```javascript
 var editor = new Editor({
   editorTarget: '#editor',
-  previewTarget: '#preview'
+  previewTarget: '#preview',
+  toolbar: [
+    {name: 'bold',           action: Editor.toggleBold},
+    {name: 'italic',         action: Editor.toggleItalic},
+    '|',
+    {name: 'quote',          action: Editor.toggleBlockquote},
+    {name: 'unordered-list', action: Editor.toggleUnOrderedList},
+    {name: 'ordered-list',   action: Editor.toggleOrderedList},
+    '|',
+    {name: 'link',           action: Editor.drawLink},
+    {name: 'image',          action: Editor.drawImage},
+  ]
 });
 editor.render();
 ```
