@@ -25,7 +25,8 @@ editor.render();
 
 ```
 $ npm install gulp -g
-$ gulp
+$ gulp dev
+$ open build/index.html
 ```
 
 ## License
