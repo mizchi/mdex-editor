@@ -44,19 +44,19 @@ Prepare html
 Instantiate
 
 ```javascript
-var editor = new Editor({
+var editor = new Mdex({
   editorTarget: '#editor',
   previewTarget: '#preview',
   toolbar: [
-    {name: 'bold',           action: Editor.toggleBold},
-    {name: 'italic',         action: Editor.toggleItalic},
+    {name: 'bold',           action: Mdex.toggleBold},
+    {name: 'italic',         action: Mdex.toggleItalic},
     '|', // splitter
-    {name: 'quote',          action: Editor.toggleBlockquote},
-    {name: 'unordered-list', action: Editor.toggleUnOrderedList},
-    {name: 'ordered-list',   action: Editor.toggleOrderedList},
+    {name: 'quote',          action: Mdex.toggleBlockquote},
+    {name: 'unordered-list', action: Mdex.toggleUnOrderedList},
+    {name: 'ordered-list',   action: Mdex.toggleOrderedList},
     '|',
-    {name: 'link',           action: Editor.drawLink},
-    {name: 'image',          action: Editor.drawImage},
+    {name: 'link',           action: Mdex.drawLink},
+    {name: 'image',          action: Mdex.drawImage},
   ]
 });
 editor.render();
