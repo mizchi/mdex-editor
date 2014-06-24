@@ -445,3 +445,5 @@ Editor.toolbar = [
   {name: 'preview', action: togglePreview}
   {name: 'fullscreen', action: toggleFullScreen}
 ]
+
+window.Editor = Editor
