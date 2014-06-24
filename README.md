@@ -7,7 +7,7 @@ Extended markdown editor: fork of `lepture/editor`
 ## Features
 
 - Real time preview
-- Adding Custome buttons
+- Adding Custom buttons
 - Rewriten by CoffeeScript
 - Easy to build by gulp
 
