@@ -1,8 +1,24 @@
 # mdex
 
-extended markdown editor
+Extended markdown editor forked by `lepture/editor`
+
+![](http://i.gyazo.com/0a0a03293b804fd2c275e63aa7561591.png)
+
+## Features
+
+- Rewriten by CoffeeScript
+- Realtime preview
+
+## Requirements
+
+- jQuery
+- CodeMirror
+- marked
+- icomoon
 
 ## Usage
+
+See `build` directory.
 
 ```html
 <div class="mdex-container">
@@ -32,13 +48,19 @@ var editor = new Editor({
 editor.render();
 ```
 
+TODO: easy custom button
+
 ## Development
 
-```
+```sh
 $ npm install gulp -g
 $ gulp dev
 $ open build/index.html
 ```
+
+## Special thanks
+
+I started this project in quipper working time. Thanks to All quipper guys!
 
 ## License
 
