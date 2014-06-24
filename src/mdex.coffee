@@ -256,7 +256,7 @@ wordCount = (data) ->
       count += 1
   return count
 
-class Editor
+class Mdex
   @markdown: (text) -> marked(text)
 
   @toggleBold: toggleBold
@@ -293,7 +293,7 @@ class Editor
     if options.editorTarget
       @editorTarget = options.editorTarget
 
-    options.toolbar = options.toolbar ? Editor.toolbar
+    options.toolbar = options.toolbar ? Mdex.toolbar
     # you can customize toolbar with object
     # [{name: 'bold', shortcut: 'Ctrl-B', className: 'icon-bold'}]
 
@@ -441,7 +441,7 @@ class Editor
 
   toggleFullScreen = -> toggleFullScreen(this)
 
-Editor.toolbar = [
+Mdex.toolbar = [
   {name: 'bold', action: toggleBold}
   {name: 'italic', action: toggleItalic}
   '|'
@@ -457,4 +457,4 @@ Editor.toolbar = [
   {name: 'fullscreen', action: toggleFullScreen}
 ]
 
-window.Editor = Editor
+window.Mdex = Mdex
