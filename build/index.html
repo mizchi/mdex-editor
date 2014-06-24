@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.js"></script>
+
+    <script type="text/javascript" src="vendor.js"></script>
+
+    <script type="text/javascript" src="mdex.js"></script>
+
+    <link rel="stylesheet" href="icomoon/style.css" />
+    <link rel="stylesheet" href="mdex.css" />
+
+    <title>mdex editor</title>
+
+    <style type="text/css">
+      body {
+        padding: 0;
+        margin: 0;
+        background-color: #f9f9f7;
+      }
+
+      .mdex-container {
+        max-width: 800px;
+        padding: 10px;
+        margin: 10px auto;
+      }
+      .mdex-editor-container {
+        float: left;
+        width: 450px;
+      }
+      .preview {
+        float: left;
+        width: 300px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="mdex-container">
+      <div class="mdex-editor-container">
+        <textarea id="editor" placeholder="Content here ...."></textarea>
+      </div>
+      <div id='preview'></div>
+    </div>
+
+    <script type="text/javascript">
+      var editor = new Editor({
+        editorTarget: '#editor',
+        previewTarget: '#preview'
+        // toolbar: [
+        //   {name: 'bold', action: Editor.toggleBold},
+        //   {name: 'italic', action: Editor.toggleItalic},
+        //   '|',
+        //   {name: 'quote', action: Editor.toggleBlockquote},
+        //   {name: 'unordered-list', action: Editor.toggleUnOrderedList},
+        //   {name: 'ordered-list', action: Editor.toggleOrderedList},
+        //   '|',
+        //   {name: 'link', action: Editor.drawLink},
+        //   {name: 'image', action: Editor.drawImage},
+        // ]
+      });
+      editor.render();
+    </script>
+
+  </body>
+</html>

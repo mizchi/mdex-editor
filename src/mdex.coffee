@@ -105,8 +105,8 @@ toggleBold = (editor) ->
     start = start.replace(/^(.*)?(\*|\_){2}(\S+.*)?$/, '$1$3')
     end = end.replace(/^(.*\S+)?(\*|\_){2}(\s+.*)?$/, '$1$3')
     startPoint.ch -= 2
-    endPoint.ch -= 2
-    cm.setLine(startPoint.line, start + end)
+    endPoint.ch += 2
+    cm.replaceRange(end, startPoint, endPoint)
   else
     text = cm.getSelection()
     cm.replaceSelection(start + text + end)
@@ -135,8 +135,8 @@ toggleItalic = (editor) ->
     start = start.replace(/^(.*)?(\*|\_)(\S+.*)?$/, '$1$3')
     end = end.replace(/^(.*\S+)?(\*|\_)(\s+.*)?$/, '$1$3')
     startPoint.ch -= 1
-    endPoint.ch -= 1
-    cm.setLine(startPoint.line, start + end)
+    endPoint.ch += 1
+    cm.replaceRange(end, startPoint, endPoint)
   else
     text = cm.getSelection()
     cm.replaceSelection(start + text + end)
@@ -279,9 +279,9 @@ class Editor
 
   @toggleFullScreen: toggleFullScreen
 
-  toggleBold: -> toggleBold(this)
+  toggleBold: => toggleBold(this)
 
-  toggleItalic: -> toggleItalic(this)
+  toggleItalic: => toggleItalic(this)
 
   constructor: (options = {}) ->
     if options.element

@@ -2,7 +2,6 @@ node_modules
 dist
 npm-debug.log
 tmp
-build
 dist
 bower_components
 .DS-store
