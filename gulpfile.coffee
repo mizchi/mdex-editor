@@ -13,7 +13,7 @@ gulp.task 'coffee', ->
     .pipe browserify
       transform: ['coffeeify']
       extensions: ['.coffee']
-      debug: true
+      # debug: true
     .pipe rename 'mdex.js'
     .pipe gulp.dest './build'
 

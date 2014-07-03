@@ -283,46 +283,24 @@ class Mdex
 
   toggleItalic: => toggleItalic(this)
 
-  constructor: (options = {}) ->
-    if options.element
-      @element = options.element
+  constructor: ({container, @toolbar, @status} = {}) ->
+    if container instanceof HTMLElement
+      @container = container
+    else if typeof container is 'string'
+      @container = document.querySelector container
+    else
+      throw 'you must set container options'
 
-    if options.previewTarget
-      @previewTarget = options.previewTarget
-
-    if options.editorTarget
-      @editorTarget = options.editorTarget
-
-    options.toolbar = options.toolbar ? Mdex.toolbar
-    # you can customize toolbar with object
-    # [{name: 'bold', shortcut: 'Ctrl-B', className: 'icon-bold'}]
-
-    unless options.hasOwnProperty('status')
-      options.status = ['lines', 'words', 'cursor']
-
-    @options = options
-
-    # If user has passed an element, it should auto rendered
-    if @element then @render()
-
-  render: (el) ->
-    unless el
-      el = document.querySelector(@editorTarget)
-
-    if @_rendered and @_rendered is el
-      # Already rendered.
-      return
-
-    @element = el
-    options = @options
+  render: ->
+    return if @_rendered
+    el = @container.querySelector('.editor')
+    # debugger
 
     keyMaps = {}
-    for key in shortcuts
-      do (key) =>
-        keyMaps[fixShortcut(key)] = (cm) =>
-          shortcuts[key](@)
-
     keyMaps["Enter"] = "newlineAndIndentContinueMarkdownList"
+    for key in shortcuts then do (key) =>
+      keyMaps[fixShortcut(key)] = (cm) =>
+        shortcuts[key](@)
 
     @codemirror = CodeMirror.fromTextArea el,
       mode: 'markdown'
@@ -331,36 +309,30 @@ class Mdex
       lineNumbers: false
       extraKeys: keyMaps
 
-    if options.toolbar isnt false
-      @createToolbar()
+    @createToolbar()   if @toolbar isnt false
+    @createStatusbar() if @status  isnt false
 
-    if options.status isnt false
-      @createStatusbar()
+    $preview = $ @container.querySelector('.preview')
+    @codemirror.on 'update', =>
+      $preview.html @onPreviewUpdate(@codemirror.getValue())
 
-    @_rendered = @element
+    @_rendered = true
 
-    if @previewTarget
-      $preview = $(@previewTarget)
-      @codemirror.on 'update', =>
-        $preview.html @onPreviewUpdate(@codemirror.getValue())
-
-  onPreviewUpdate: (text) ->
-    marked(text)
+  onPreviewUpdate: (text) -> marked(text)
 
   getCodemirror: -> @codemirror
 
-  getContent: ->
-    @getCodemirror().getValue()
+  getContent: -> @getCodemirror().getValue()
 
   createToolbar: (items) ->
-    items = items ? @options.toolbar
+    items = items ? @toolbar
 
     return if not items or items.length is 0
 
     bar = document.createElement('div')
     bar.className = 'editor-toolbar'
 
-    @toolbar = {}
+    @_toolbar = {}
 
     for item, i in items then do (item) =>
       el =
@@ -381,15 +353,15 @@ class Mdex
           el.href = item.action
           el.target = '_blank'
 
-      @toolbar[item.name ? item] = el
+      @_toolbar[item.name ? item] = el
       bar.appendChild(el)
 
     cm = @codemirror
     cm.on 'cursorActivity', =>
       stat = getState(cm)
-      for key in @toolbar
+      for key in @_toolbar
         do (key) =>
-          el = @toolbar[key]
+          el = @_toolbar[key]
           if stat[key]
             el.className += ' active'
           else
@@ -400,7 +372,7 @@ class Mdex
     return bar
 
   createStatusbar: (status) ->
-    status = status or this.options.status
+    status = @status
 
     return if not status or status.length is 0
 
