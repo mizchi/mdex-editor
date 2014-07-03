@@ -30,9 +30,9 @@
   <body>
     <div class="mdex-container">
       <div class="mdex-editor-container">
-        <textarea id="editor" placeholder="Content here ...."></textarea>
+        <textarea class="editor" placeholder="Content here ...."></textarea>
       </div>
-      <div id='preview'></div>
+      <div class='preview'></div>
     </div>
 
     <script type="text/javascript">
@@ -44,10 +44,8 @@
           console.log('hello');
         }
       }
-
       var editor = new Mdex({
-        editorTarget: '#editor',
-        previewTarget: '#preview',
+				container: '.mdex-container'
         toolbar: [
           {name: 'bold',           action: Mdex.toggleBold},
           {name: 'italic',         action: Mdex.toggleItalic},

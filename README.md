@@ -35,9 +35,9 @@ Prepare html
 ```html
 <div class="mdex-container">
   <div class="mdex-editor-container">
-    <textarea id="editor"></textarea>
+    <textarea class="editor"></textarea>
   </div>
-  <div id='preview'></div>
+  <div class='preview'></div>
 </div>
 ```
 
@@ -45,8 +45,7 @@ Instantiate
 
 ```javascript
 var editor = new Mdex({
-  editorTarget: '#editor',
-  previewTarget: '#preview',
+  container: '.mdex-container',
   toolbar: [
     {name: 'bold',           action: Mdex.toggleBold},
     {name: 'italic',         action: Mdex.toggleItalic},
@@ -79,8 +78,7 @@ var myButton = {
 };
 
 var editor = new Mdex({
-  editorTarget: '#editor',
-  previewTarget: '#preview',
+  container: '.mdex-container',
   toolbar: [myButton]
 });
 editor.render();
@@ -108,6 +106,7 @@ I started this project in quipper working time. Thanks to All quipper guys!
 ## License
 
 Copyright (c) 2014 by Koutaro Chikuba
+
 Copyright (c) 2013 - 2014 by Hsiaoming Yang
 
 Permission is hereby granted, free of charge to any noncommercial projects (paid for commercial support), including the rights to use, copy, modify, merge of the Software. Limitation of the rights to publish, distribute, and/or sell copies of the Software.
