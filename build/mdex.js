@@ -1,315 +1,73 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var Toolbar, drawImage, drawLink, getState, redo, toggleBlockquote, toggleBold, toggleFullScreen, toggleItalic, toggleOrderedList, togglePreview, toggleUnOrderedList, undo, _replaceSelection, _toggleLine,
+var Toolbar,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 window.Mdex = {};
 
-getState = function(cm, pos) {
-  var data, i, ret, stat, text, types, _i, _len;
-  pos = pos || cm.getCursor('start');
-  stat = cm.getTokenAt(pos);
-  if (!stat.type) {
-    return {};
-  }
-  types = stat.type.split(' ');
-  ret = {};
-  data = null;
-  text = null;
-  for (i = _i = 0, _len = types.length; _i < _len; i = ++_i) {
-    data = types[i];
-    if (data === 'strong') {
-      ret.bold = true;
-    } else if (data === 'variable-2') {
-      text = cm.getLine(pos.line);
-      if (/^\s*\d+\.\s/.test(text)) {
-        ret['ordered-list'] = true;
-      } else {
-        ret['unordered-list'] = true;
-      }
-    } else if (data === 'atom') {
-      ret.quote = true;
-    } else if (data === 'em') {
-      ret.italic = true;
-    }
-  }
-  return ret;
-};
-
-toggleFullScreen = function(editor) {
-  var cancel, doc, el, isFull, request;
-  el = editor.codemirror.getWrapperElement();
-  doc = document;
-  isFull = doc.fullScreen || doc.mozFullScreen || doc.webkitFullScreen;
-  request = function() {
-    if (el.requestFullScreen) {
-      return el.requestFullScreen();
-    } else if (el.mozRequestFullScreen) {
-      return el.mozRequestFullScreen();
-    } else if (el.webkitRequestFullScreen) {
-      return el.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-    }
-  };
-  cancel = function() {
-    if (doc.cancelFullScreen) {
-      return doc.cancelFullScreen();
-    } else if (doc.mozCancelFullScreen) {
-      return doc.mozCancelFullScreen();
-    } else if (doc.webkitCancelFullScreen) {
-      return doc.webkitCancelFullScreen();
-    }
-  };
-  if (!isFull) {
-    return request();
-  } else if (cancel) {
-    return cancel();
-  }
-};
-
-toggleBold = function(editor) {
-  var cm, end, endPoint, start, startPoint, stat, text;
-  cm = editor.codemirror;
-  stat = getState(cm);
-  text = null;
-  start = '**';
-  end = '**';
-  startPoint = cm.getCursor('start');
-  endPoint = cm.getCursor('end');
-  if (stat.bold) {
-    text = cm.getLine(startPoint.line);
-    start = text.slice(0, startPoint.ch);
-    end = text.slice(startPoint.ch);
-    start = start.replace(/^(.*)?(\*|\_){2}(\S+.*)?$/, '$1$3');
-    end = end.replace(/^(.*\S+)?(\*|\_){2}(\s+.*)?$/, '$1$3');
-    startPoint.ch -= 2;
-    endPoint.ch += 2;
-    cm.replaceRange(end, startPoint, endPoint);
-  } else {
-    text = cm.getSelection();
-    cm.replaceSelection(start + text + end);
-    startPoint.ch += 2;
-    endPoint.ch += 2;
-  }
-  cm.setSelection(startPoint, endPoint);
-  return cm.focus();
-};
-
-toggleItalic = function(editor) {
-  var cm, end, endPoint, start, startPoint, stat, text;
-  cm = editor.codemirror;
-  stat = getState(cm);
-  text = null;
-  start = '*';
-  end = '*';
-  startPoint = cm.getCursor('start');
-  endPoint = cm.getCursor('end');
-  if (stat.italic) {
-    text = cm.getLine(startPoint.line);
-    start = text.slice(0, startPoint.ch);
-    end = text.slice(startPoint.ch);
-    start = start.replace(/^(.*)?(\*|\_)(\S+.*)?$/, '$1$3');
-    end = end.replace(/^(.*\S+)?(\*|\_)(\s+.*)?$/, '$1$3');
-    startPoint.ch -= 1;
-    endPoint.ch += 1;
-    cm.replaceRange(end, startPoint, endPoint);
-  } else {
-    text = cm.getSelection();
-    cm.replaceSelection(start + text + end);
-    startPoint.ch += 1;
-    endPoint.ch += 1;
-  }
-  cm.setSelection(startPoint, endPoint);
-  return cm.focus();
-};
-
-toggleBlockquote = function(editor) {
-  var cm;
-  cm = editor.codemirror;
-  return _toggleLine(cm, 'quote');
-};
-
-toggleUnOrderedList = function(editor) {
-  var cm;
-  cm = editor.codemirror;
-  return _toggleLine(cm, 'unordered-list');
-};
-
-toggleOrderedList = function(editor) {
-  var cm;
-  cm = editor.codemirror;
-  return _toggleLine(cm, 'ordered-list');
-};
-
-drawLink = function(editor) {
-  var cm, stat;
-  cm = editor.codemirror;
-  stat = getState(cm);
-  return _replaceSelection(cm, stat.link, '[', '](http:#)');
-};
-
-drawImage = function(editor) {
-  var cm, stat;
-  cm = editor.codemirror;
-  stat = getState(cm);
-  return _replaceSelection(cm, stat.image, '![', '](http:#)');
-};
-
-undo = function(editor) {
-  var cm;
-  cm = editor.codemirror;
-  cm.undo();
-  return cm.focus();
-};
-
-redo = function(editor) {
-  var cm;
-  cm = editor.codemirror;
-  cm.redo();
-  return cm.focus();
-};
-
-togglePreview = function(editor) {
-  var cm, parse, preview, text, toolbar, wrapper;
-  toolbar = editor.toolbar.preview;
-  parse = editor.constructor.markdown;
-  cm = editor.codemirror;
-  wrapper = cm.getWrapperElement();
-  preview = wrapper.lastChild;
-  if (!/editor-preview/.test(preview.className)) {
-    preview = document.createElement('div');
-    preview.className = 'editor-preview';
-    wrapper.appendChild(preview);
-  }
-  if (/editor-preview-active/.test(preview.className)) {
-    preview.className = preview.className.replace(/\s*editor-preview-active\s*/g, '');
-    toolbar.className = toolbar.className.replace(/\s*active\s*/g, '');
-  } else {
-    setTimeout((function() {
-      return preview.className += ' editor-preview-active';
-    }), 1);
-    toolbar.className += ' active';
-  }
-  text = cm.getValue();
-  return preview.innerHTML = parse(text);
-};
-
-_replaceSelection = function(cm, active, start, end) {
-  var endPoint, startPoint, text;
-  text = null;
-  startPoint = cm.getCursor('start');
-  endPoint = cm.getCursor('end');
-  if (active) {
-    text = cm.getLine(startPoint.line);
-    start = text.slice(0, startPoint.ch);
-    end = text.slice(startPoint.ch);
-    cm.setLine(startPoint.line, start + end);
-  } else {
-    text = cm.getSelection();
-    cm.replaceSelection(start + text + end);
-    startPoint.ch += start.length;
-    endPoint.ch += start.length;
-  }
-  cm.setSelection(startPoint, endPoint);
-  return cm.focus();
-};
-
-_toggleLine = function(cm, name) {
-  var endPoint, i, map, repl, startPoint, stat, _fn, _i, _ref, _ref1;
-  stat = getState(cm);
-  startPoint = cm.getCursor('start');
-  endPoint = cm.getCursor('end');
-  repl = {
-    quote: /^(\s*)\>\s+/,
-    'unordered-list': /^(\s*)(\*|\-|\+)\s+/,
-    'ordered-list': /^(\s*)\d+\.\s+/
-  };
-  map = {
-    quote: '> ',
-    'unordered-list': '* ',
-    'ordered-list': '1. '
-  };
-  _fn = (function(_this) {
-    return function(i) {
-      var text;
-      text = cm.getLine(i);
-      if (stat[name]) {
-        text = text.replace(repl[name], '$1');
-      } else {
-        text = map[name] + text;
-      }
-      return cm.setLine(i, text);
-    };
-  })(this);
-  for (i = _i = _ref = startPoint.line, _ref1 = endPoint.line; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; i = _ref <= _ref1 ? ++_i : --_i) {
-    _fn(i);
-  }
-  return cm.focus();
-};
+require('./utils');
 
 Toolbar = require('./toolbar');
 
+Mdex.shortcuts = {
+  'Cmd-B': Mdex.toggleBold,
+  'Cmd-I': Mdex.toggleItalic,
+  'Cmd-K': Mdex.drawLink,
+  'Cmd-Alt-I': Mdex.drawImage,
+  "Cmd-'": Mdex.toggleBlockquote,
+  'Cmd-Alt-L': Mdex.toggleOrderedList,
+  'Cmd-L': Mdex.toggleUnOrderedList
+};
+
+Mdex.fixShortcut = function(name) {
+  if (/Mac/.test(navigator.platform)) {
+    name = name.replace('Ctrl', 'Cmd');
+  } else {
+    name = name.replace('Cmd', 'Ctrl');
+  }
+  return name;
+};
+
 Mdex.Editor = (function() {
-  Editor.markdown = function(text) {
-    return marked(text);
-  };
-
-  Editor.toggleBold = toggleBold;
-
-  Editor.toggleItalic = toggleItalic;
-
-  Editor.toggleBlockquote = toggleBlockquote;
-
-  Editor.toggleUnOrderedList = toggleUnOrderedList;
-
-  Editor.toggleOrderedList = toggleOrderedList;
-
-  Editor.drawLink = drawLink;
-
-  Editor.drawImage = drawImage;
-
-  Editor.undo = undo;
-
-  Editor.redo = redo;
-
-  Editor.toggleFullScreen = toggleFullScreen;
+  var toggleFullScreen;
 
   Editor.prototype.toggleBlockquote = function() {
-    return toggleBlockquote(this);
+    return Mdex.toggleBlockquote(this);
   };
 
   Editor.prototype.toggleUnOrderedList = function() {
-    return toggleUnOrderedList(this);
+    return Mdex.toggleUnOrderedList(this);
   };
 
   Editor.prototype.toggleOrderedList = function() {
-    return toggleOrderedList(this);
+    return Mdex.toggleOrderedList(this);
   };
 
   Editor.prototype.drawLink = function() {
-    return drawLink(this);
+    return Mdex.drawLink(this);
   };
 
   Editor.prototype.drawImage = function() {
-    return drawImage(this);
+    return Mdex.drawImage(this);
   };
 
   Editor.prototype.undo = function() {
-    return undo(this);
+    return Mdex.undo(this);
   };
 
   Editor.prototype.redo = function() {
-    return redo(this);
+    return Mdex.redo(this);
   };
 
   toggleFullScreen = function() {
-    return toggleFullScreen(this);
+    return Mdex.toggleFullScreen(this);
   };
 
   Editor.prototype.toggleBold = function() {
-    return toggleBold(this);
+    return Mdex.toggleBold(this);
   };
 
   Editor.prototype.toggleItalic = function() {
-    return toggleItalic(this);
+    return Mdex.toggleItalic(this);
   };
 
   function Editor(_arg) {
@@ -385,61 +143,8 @@ Mdex.Editor = (function() {
 
 })();
 
-Mdex.shortcuts = {
-  'Cmd-B': toggleBold,
-  'Cmd-I': toggleItalic,
-  'Cmd-K': drawLink,
-  'Cmd-Alt-I': drawImage,
-  "Cmd-'": toggleBlockquote,
-  'Cmd-Alt-L': toggleOrderedList,
-  'Cmd-L': toggleUnOrderedList
-};
 
-Mdex.fixShortcut = function(name) {
-  if (isMac) {
-    name = name.replace('Ctrl', 'Cmd');
-  } else {
-    name = name.replace('Cmd', 'Ctrl');
-  }
-  return name;
-};
-
-Mdex.defaultToolbar = [
-  {
-    name: 'bold',
-    action: toggleBold
-  }, {
-    name: 'italic',
-    action: toggleItalic
-  }, '|', {
-    name: 'quote',
-    action: toggleBlockquote
-  }, {
-    name: 'unordered-list',
-    action: toggleUnOrderedList
-  }, {
-    name: 'ordered-list',
-    action: toggleOrderedList
-  }, '|', {
-    name: 'link',
-    action: drawLink
-  }, {
-    name: 'image',
-    action: drawImage
-  }, '|', {
-    name: 'info',
-    action: 'http:#lab.lepture.com/editor/markdown'
-  }, {
-    name: 'preview',
-    action: togglePreview
-  }, {
-    name: 'fullscreen',
-    action: toggleFullScreen
-  }
-];
-
-
-},{"./toolbar":2}],2:[function(require,module,exports){
+},{"./toolbar":2,"./utils":3}],2:[function(require,module,exports){
 var Toolbar, createIcon, createSep, getState;
 
 createIcon = function(name, options) {
@@ -451,7 +156,7 @@ createIcon = function(name, options) {
     shortcut = Mdex.fixShortcut(shortcut);
     el.title = shortcut;
     el.title = el.title.replace('Cmd', '⌘');
-    if (isMac) {
+    if (/Mac/.test(navigator.platform)) {
       el.title = el.title.replace('Alt', '⌥');
     }
   }
@@ -561,6 +266,251 @@ module.exports = Toolbar = (function() {
   return Toolbar;
 
 })();
+
+
+},{}],3:[function(require,module,exports){
+var getState, _replaceSelection, _toggleLine;
+
+getState = Mdex.getState = function(cm, pos) {
+  var data, i, ret, stat, text, types, _i, _len;
+  pos = pos || cm.getCursor('start');
+  stat = cm.getTokenAt(pos);
+  if (!stat.type) {
+    return {};
+  }
+  types = stat.type.split(' ');
+  ret = {};
+  data = null;
+  text = null;
+  for (i = _i = 0, _len = types.length; _i < _len; i = ++_i) {
+    data = types[i];
+    if (data === 'strong') {
+      ret.bold = true;
+    } else if (data === 'variable-2') {
+      text = cm.getLine(pos.line);
+      if (/^\s*\d+\.\s/.test(text)) {
+        ret['ordered-list'] = true;
+      } else {
+        ret['unordered-list'] = true;
+      }
+    } else if (data === 'atom') {
+      ret.quote = true;
+    } else if (data === 'em') {
+      ret.italic = true;
+    }
+  }
+  return ret;
+};
+
+Mdex.toggleFullScreen = function(editor) {
+  var cancel, doc, el, isFull, request;
+  el = editor.codemirror.getWrapperElement();
+  doc = document;
+  isFull = doc.fullScreen || doc.mozFullScreen || doc.webkitFullScreen;
+  request = function() {
+    if (el.requestFullScreen) {
+      return el.requestFullScreen();
+    } else if (el.mozRequestFullScreen) {
+      return el.mozRequestFullScreen();
+    } else if (el.webkitRequestFullScreen) {
+      return el.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+    }
+  };
+  cancel = function() {
+    if (doc.cancelFullScreen) {
+      return doc.cancelFullScreen();
+    } else if (doc.mozCancelFullScreen) {
+      return doc.mozCancelFullScreen();
+    } else if (doc.webkitCancelFullScreen) {
+      return doc.webkitCancelFullScreen();
+    }
+  };
+  if (!isFull) {
+    return request();
+  } else if (cancel) {
+    return cancel();
+  }
+};
+
+Mdex.toggleBold = function(editor) {
+  var cm, end, endPoint, start, startPoint, stat, text;
+  cm = editor.codemirror;
+  stat = getState(cm);
+  text = null;
+  start = '**';
+  end = '**';
+  startPoint = cm.getCursor('start');
+  endPoint = cm.getCursor('end');
+  if (stat.bold) {
+    text = cm.getLine(startPoint.line);
+    start = text.slice(0, startPoint.ch);
+    end = text.slice(startPoint.ch);
+    start = start.replace(/^(.*)?(\*|\_){2}(\S+.*)?$/, '$1$3');
+    end = end.replace(/^(.*\S+)?(\*|\_){2}(\s+.*)?$/, '$1$3');
+    startPoint.ch -= 2;
+    endPoint.ch += 2;
+    cm.replaceRange(end, startPoint, endPoint);
+  } else {
+    text = cm.getSelection();
+    cm.replaceSelection(start + text + end);
+    startPoint.ch += 2;
+    endPoint.ch += 2;
+  }
+  cm.setSelection(startPoint, endPoint);
+  return cm.focus();
+};
+
+Mdex.toggleItalic = function(editor) {
+  var cm, end, endPoint, start, startPoint, stat, text;
+  cm = editor.codemirror;
+  stat = getState(cm);
+  text = null;
+  start = '*';
+  end = '*';
+  startPoint = cm.getCursor('start');
+  endPoint = cm.getCursor('end');
+  if (stat.italic) {
+    text = cm.getLine(startPoint.line);
+    start = text.slice(0, startPoint.ch);
+    end = text.slice(startPoint.ch);
+    start = start.replace(/^(.*)?(\*|\_)(\S+.*)?$/, '$1$3');
+    end = end.replace(/^(.*\S+)?(\*|\_)(\s+.*)?$/, '$1$3');
+    startPoint.ch -= 1;
+    endPoint.ch += 1;
+    cm.replaceRange(end, startPoint, endPoint);
+  } else {
+    text = cm.getSelection();
+    cm.replaceSelection(start + text + end);
+    startPoint.ch += 1;
+    endPoint.ch += 1;
+  }
+  cm.setSelection(startPoint, endPoint);
+  return cm.focus();
+};
+
+Mdex.toggleBlockquote = function(editor) {
+  var cm;
+  cm = editor.codemirror;
+  return _toggleLine(cm, 'quote');
+};
+
+Mdex.toggleUnOrderedList = function(editor) {
+  var cm;
+  cm = editor.codemirror;
+  return _toggleLine(cm, 'unordered-list');
+};
+
+Mdex.toggleOrderedList = function(editor) {
+  var cm;
+  cm = editor.codemirror;
+  return _toggleLine(cm, 'ordered-list');
+};
+
+Mdex.drawLink = function(editor) {
+  var cm, stat;
+  cm = editor.codemirror;
+  stat = getState(cm);
+  return _replaceSelection(cm, stat.link, '[', '](http:#)');
+};
+
+Mdex.drawImage = function(editor) {
+  var cm, stat;
+  cm = editor.codemirror;
+  stat = getState(cm);
+  return _replaceSelection(cm, stat.image, '![', '](http:#)');
+};
+
+Mdex.undo = function(editor) {
+  var cm;
+  cm = editor.codemirror;
+  cm.undo();
+  return cm.focus();
+};
+
+Mdex.redo = function(editor) {
+  var cm;
+  cm = editor.codemirror;
+  cm.redo();
+  return cm.focus();
+};
+
+Mdex.togglePreview = function(editor) {
+  var cm, parse, preview, text, toolbar, wrapper;
+  toolbar = editor.toolbar.preview;
+  parse = editor.constructor.markdown;
+  cm = editor.codemirror;
+  wrapper = cm.getWrapperElement();
+  preview = wrapper.lastChild;
+  if (!/editor-preview/.test(preview.className)) {
+    preview = document.createElement('div');
+    preview.className = 'editor-preview';
+    wrapper.appendChild(preview);
+  }
+  if (/editor-preview-active/.test(preview.className)) {
+    preview.className = preview.className.replace(/\s*editor-preview-active\s*/g, '');
+    toolbar.className = toolbar.className.replace(/\s*active\s*/g, '');
+  } else {
+    setTimeout((function() {
+      return preview.className += ' editor-preview-active';
+    }), 1);
+    toolbar.className += ' active';
+  }
+  text = cm.getValue();
+  return preview.innerHTML = parse(text);
+};
+
+_replaceSelection = function(cm, active, start, end) {
+  var endPoint, startPoint, text;
+  text = null;
+  startPoint = cm.getCursor('start');
+  endPoint = cm.getCursor('end');
+  if (active) {
+    text = cm.getLine(startPoint.line);
+    start = text.slice(0, startPoint.ch);
+    end = text.slice(startPoint.ch);
+    cm.setLine(startPoint.line, start + end);
+  } else {
+    text = cm.getSelection();
+    cm.replaceSelection(start + text + end);
+    startPoint.ch += start.length;
+    endPoint.ch += start.length;
+  }
+  cm.setSelection(startPoint, endPoint);
+  return cm.focus();
+};
+
+_toggleLine = function(cm, name) {
+  var endPoint, i, map, repl, startPoint, stat, _fn, _i, _ref, _ref1;
+  stat = getState(cm);
+  startPoint = cm.getCursor('start');
+  endPoint = cm.getCursor('end');
+  repl = {
+    quote: /^(\s*)\>\s+/,
+    'unordered-list': /^(\s*)(\*|\-|\+)\s+/,
+    'ordered-list': /^(\s*)\d+\.\s+/
+  };
+  map = {
+    quote: '> ',
+    'unordered-list': '* ',
+    'ordered-list': '1. '
+  };
+  _fn = (function(_this) {
+    return function(i) {
+      var text;
+      text = cm.getLine(i);
+      if (stat[name]) {
+        text = text.replace(repl[name], '$1');
+      } else {
+        text = map[name] + text;
+      }
+      return cm.setLine(i, text);
+    };
+  })(this);
+  for (i = _i = _ref = startPoint.line, _ref1 = endPoint.line; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; i = _ref <= _ref1 ? ++_i : --_i) {
+    _fn(i);
+  }
+  return cm.focus();
+};
 
 
 },{}]},{},[1])

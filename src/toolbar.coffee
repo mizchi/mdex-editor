@@ -7,7 +7,7 @@ createIcon = (name, options) ->
     shortcut = Mdex.fixShortcut(shortcut)
     el.title = shortcut
     el.title = el.title.replace('Cmd', '⌘')
-    if isMac
+    if /Mac/.test(navigator.platform)
       el.title = el.title.replace('Alt', '⌥')
 
   el.className = options.className or 'icon-' + name
