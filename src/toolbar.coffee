@@ -1,3 +1,10 @@
+class Button
+  constructor: ->
+    @el = document.createElement('a')
+    @$el = $(@el)
+
+  onClick: (editor) =>
+
 createIcon = (name, options) ->
   options = options or {}
   el = document.createElement('a')
@@ -18,32 +25,6 @@ createSep = ->
   el.className = 'separator'
   el.innerHTML = '|'
   return el
-
-getState = (cm, pos) ->
-  pos = pos or cm.getCursor('start')
-  stat = cm.getTokenAt(pos)
-  if !stat.type then return {}
-
-  types = stat.type.split(' ')
-
-  ret = {}
-  data = null
-  text = null
-  for data, i in types
-    if data is 'strong'
-      ret.bold = true
-    else if data is 'variable-2'
-      text = cm.getLine(pos.line)
-      if /^\s*\d+\.\s/.test(text)
-        ret['ordered-list'] = true
-      else
-        ret['unordered-list'] = true
-    else if data is 'atom'
-      ret.quote = true
-    else if data is 'em'
-      ret.italic = true
-  return ret
-
 
 module.exports = class Toolbar
   constructor: (@parent) ->
@@ -77,7 +58,7 @@ module.exports = class Toolbar
   appendToCodemirror: ->
     cm = @parent.codemirror
     cm.on 'cursorActivity', =>
-      stat = getState(cm)
+      stat = Mdex.getState(cm)
       for key in @_toolbar then do (key) =>
         el = @_toolbar[key]
         if stat[key]

@@ -145,7 +145,21 @@ Mdex.Editor = (function() {
 
 
 },{"./toolbar":2,"./utils":3}],2:[function(require,module,exports){
-var Toolbar, createIcon, createSep, getState;
+var Button, Toolbar, createIcon, createSep,
+  __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+Button = (function() {
+  function Button() {
+    this.onClick = __bind(this.onClick, this);
+    this.el = document.createElement('a');
+    this.$el = $(this.el);
+  }
+
+  Button.prototype.onClick = function(editor) {};
+
+  return Button;
+
+})();
 
 createIcon = function(name, options) {
   var el, shortcut;
@@ -170,37 +184,6 @@ createSep = function() {
   el.className = 'separator';
   el.innerHTML = '|';
   return el;
-};
-
-getState = function(cm, pos) {
-  var data, i, ret, stat, text, types, _i, _len;
-  pos = pos || cm.getCursor('start');
-  stat = cm.getTokenAt(pos);
-  if (!stat.type) {
-    return {};
-  }
-  types = stat.type.split(' ');
-  ret = {};
-  data = null;
-  text = null;
-  for (i = _i = 0, _len = types.length; _i < _len; i = ++_i) {
-    data = types[i];
-    if (data === 'strong') {
-      ret.bold = true;
-    } else if (data === 'variable-2') {
-      text = cm.getLine(pos.line);
-      if (/^\s*\d+\.\s/.test(text)) {
-        ret['ordered-list'] = true;
-      } else {
-        ret['unordered-list'] = true;
-      }
-    } else if (data === 'atom') {
-      ret.quote = true;
-    } else if (data === 'em') {
-      ret.italic = true;
-    }
-  }
-  return ret;
 };
 
 module.exports = Toolbar = (function() {
@@ -240,7 +223,7 @@ module.exports = Toolbar = (function() {
     cm.on('cursorActivity', (function(_this) {
       return function() {
         var key, stat, _i, _len, _ref, _results;
-        stat = getState(cm);
+        stat = Mdex.getState(cm);
         _ref = _this._toolbar;
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
