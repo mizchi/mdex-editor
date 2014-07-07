@@ -1,41 +1,4 @@
-isMac = /Mac/.test(navigator.platform)
-
-shortcuts =
-  'Cmd-B': toggleBold,
-  'Cmd-I': toggleItalic,
-  'Cmd-K': drawLink,
-  'Cmd-Alt-I': drawImage,
-  "Cmd-'": toggleBlockquote,
-  'Cmd-Alt-L': toggleOrderedList,
-  'Cmd-L': toggleUnOrderedList
-
-fixShortcut = (name) ->
-  if isMac
-    name = name.replace('Ctrl', 'Cmd')
-  else
-    name = name.replace('Cmd', 'Ctrl')
-  return name
-
-createIcon = (name, options) ->
-  options = options or {}
-  el = document.createElement('a')
-
-  shortcut = options.shortcut or shortcuts[name]
-  if shortcut
-    shortcut = fixShortcut(shortcut)
-    el.title = shortcut
-    el.title = el.title.replace('Cmd', '⌘')
-    if isMac
-      el.title = el.title.replace('Alt', '⌥')
-
-  el.className = options.className or 'icon-' + name
-  return el
-
-createSep = ->
-  el = document.createElement('i')
-  el.className = 'separator'
-  el.innerHTML = '|'
-  return el
+window.Mdex = {}
 
 getState = (cm, pos) ->
   pos = pos or cm.getCursor('start')
@@ -160,7 +123,6 @@ toggleOrderedList = (editor) ->
   cm = editor.codemirror
   _toggleLine(cm, 'ordered-list')
 
-
 drawLink = (editor) ->
   cm = editor.codemirror
   stat = getState(cm)
@@ -233,6 +195,7 @@ _toggleLine = (cm, name) ->
     quote: '> ',
     'unordered-list': '* ',
     'ordered-list': '1. '
+
   for i in [startPoint.line..endPoint.line]
     do (i) =>
       text = cm.getLine(i)
@@ -243,20 +206,9 @@ _toggleLine = (cm, name) ->
       cm.setLine(i, text)
   cm.focus()
 
+Toolbar = require './toolbar'
 
-wordCount = (data) ->
-  pattern = /[a-zA-Z0-9_\u0392-\u03c9]+|[\u4E00-\u9FFF\u3400-\u4dbf\uf900-\ufaff\u3040-\u309f\uac00-\ud7af]+/g
-  m = data.match(pattern)
-  count = 0
-  if m is null then return count
-  for i in [0...m.length]
-    if m[i].charCodeAt(0) >= 0x4E00
-      count += m[i].length
-    else
-      count += 1
-  return count
-
-class Mdex
+class Mdex.Editor
   @markdown: (text) -> marked(text)
 
   @toggleBold: toggleBold
@@ -279,11 +231,28 @@ class Mdex
 
   @toggleFullScreen: toggleFullScreen
 
+  toggleBlockquote: -> toggleBlockquote(@)
+
+  toggleUnOrderedList: -> toggleUnOrderedList(@)
+
+  toggleOrderedList: -> toggleOrderedList(@)
+
+  drawLink: -> drawLink(@)
+
+  drawImage: -> drawImage(@)
+
+  undo: -> undo(@)
+
+  redo: -> redo(@)
+
+  toggleFullScreen = -> toggleFullScreen(this)
+
   toggleBold: => toggleBold(this)
 
   toggleItalic: => toggleItalic(this)
 
-  constructor: ({container, @toolbar, @status} = {}) ->
+  constructor: ({container, toolbar, @status} = {}) ->
+    @toolbarOption = toolbar
     if container instanceof HTMLElement
       @container = container
     else if typeof container is 'string'
@@ -294,13 +263,13 @@ class Mdex
   render: ->
     return if @_rendered
     el = @container.querySelector('.editor')
-    # debugger
 
+    # keybinds
     keyMaps = {}
     keyMaps["Enter"] = "newlineAndIndentContinueMarkdownList"
-    for key in shortcuts then do (key) =>
-      keyMaps[fixShortcut(key)] = (cm) =>
-        shortcuts[key](@)
+    for key in Mdex.shortcuts then do (key) =>
+      keyMaps[Mdex.fixShortcut(key)] = (cm) =>
+        Mdex.shortcuts[key](@)
 
     @codemirror = CodeMirror.fromTextArea el,
       mode: 'markdown'
@@ -309,9 +278,9 @@ class Mdex
       lineNumbers: false
       extraKeys: keyMaps
 
-    @createToolbar()   if @toolbar isnt false
-    @createStatusbar() if @status  isnt false
+    @createToolbar()   if @toolbarOption isnt false
 
+    # on update
     $preview = $ @container.querySelector('.preview')
     @codemirror.on 'update', =>
       $preview.html @onPreviewUpdate(@codemirror.getValue())
@@ -320,110 +289,30 @@ class Mdex
 
   onPreviewUpdate: (text) -> marked(text)
 
-  getCodemirror: -> @codemirror
+  createToolbar: ->
+    @toolbar = new Toolbar(@)
+    items = @toolbarOption
+    for item in items
+      @toolbar.addButton item
+    @toolbar.appendToCodemirror(@codemirror)
 
-  getContent: -> @getCodemirror().getValue()
+Mdex.shortcuts =
+  'Cmd-B': toggleBold,
+  'Cmd-I': toggleItalic,
+  'Cmd-K': drawLink,
+  'Cmd-Alt-I': drawImage,
+  "Cmd-'": toggleBlockquote,
+  'Cmd-Alt-L': toggleOrderedList,
+  'Cmd-L': toggleUnOrderedList
 
-  createToolbar: (items) ->
-    items = items ? @toolbar
+Mdex.fixShortcut = (name) ->
+  if isMac
+    name = name.replace('Ctrl', 'Cmd')
+  else
+    name = name.replace('Cmd', 'Ctrl')
+  return name
 
-    return if not items or items.length is 0
-
-    bar = document.createElement('div')
-    bar.className = 'editor-toolbar'
-
-    @_toolbar = {}
-
-    for item, i in items then do (item) =>
-      el =
-        if item.name
-          createIcon(item.name, item)
-        else if item is '|'
-          createSep()
-        else if item.el
-          item.el
-        else
-          createIcon(item)
-
-      if item.action
-        if (typeof item.action) is 'function'
-          el.onclick = (e) =>
-            item.action(@)
-        else if (typeof item.action) is 'string'
-          el.href = item.action
-          el.target = '_blank'
-
-      @_toolbar[item.name ? item] = el
-      bar.appendChild(el)
-
-    cm = @codemirror
-    cm.on 'cursorActivity', =>
-      stat = getState(cm)
-      for key in @_toolbar
-        do (key) =>
-          el = @_toolbar[key]
-          if stat[key]
-            el.className += ' active'
-          else
-            el.className = el.className.replace(/\s*active\s*/g, '')
-
-    cmWrapper = cm.getWrapperElement()
-    cmWrapper.parentNode.insertBefore(bar, cmWrapper)
-    return bar
-
-  createStatusbar: (status) ->
-    status = @status
-
-    return if not status or status.length is 0
-
-    bar = document.createElement('div')
-    bar.className = 'editor-statusbar'
-
-    pos = null
-    cm = @codemirror
-
-    for name, i in status then do (name) =>
-      el = document.createElement('span')
-      el.className = name
-      if name is 'words'
-        el.innerHTML = '0'
-        cm.on 'update', =>
-          el.innerHTML = wordCount(cm.getValue())
-
-      else if name is 'lines'
-        console.log
-        el.innerHTML = '0'
-        cm.on 'update', =>
-          el.innerHTML = cm.lineCount()
-
-      else if name is 'cursor'
-        el.innerHTML = '0:0'
-        cm.on 'cursorActivity', =>
-          pos = cm.getCursor()
-          el.innerHTML = pos.line + ':' + pos.ch
-      bar.appendChild(el)
-
-    cmWrapper = this.codemirror.getWrapperElement()
-    cmWrapper.parentNode.insertBefore(bar, cmWrapper.nextSibling)
-    return bar
-
-  toggleBlockquote: -> toggleBlockquote(this)
-
-  toggleUnOrderedList: -> toggleUnOrderedList(this)
-
-  toggleOrderedList: -> toggleOrderedList(this)
-
-  drawLink: -> drawLink(this)
-
-  drawImage: -> drawImage(this)
-
-  undo: -> undo(this)
-
-  redo: -> redo(this)
-
-  toggleFullScreen = -> toggleFullScreen(this)
-
-Mdex.toolbar = [
+Mdex.defaultToolbar = [
   {name: 'bold', action: toggleBold}
   {name: 'italic', action: toggleItalic}
   '|'
@@ -439,4 +328,4 @@ Mdex.toolbar = [
   {name: 'fullscreen', action: toggleFullScreen}
 ]
 
-window.Mdex = Mdex
+# window.Mdex = Mdex.Editor

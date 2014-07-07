@@ -1,52 +1,8 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var Mdex, createIcon, createSep, drawImage, drawLink, fixShortcut, getState, isMac, redo, shortcuts, toggleBlockquote, toggleBold, toggleFullScreen, toggleItalic, toggleOrderedList, togglePreview, toggleUnOrderedList, undo, wordCount, _replaceSelection, _toggleLine,
+var Toolbar, drawImage, drawLink, getState, redo, toggleBlockquote, toggleBold, toggleFullScreen, toggleItalic, toggleOrderedList, togglePreview, toggleUnOrderedList, undo, _replaceSelection, _toggleLine,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-isMac = /Mac/.test(navigator.platform);
-
-shortcuts = {
-  'Cmd-B': toggleBold,
-  'Cmd-I': toggleItalic,
-  'Cmd-K': drawLink,
-  'Cmd-Alt-I': drawImage,
-  "Cmd-'": toggleBlockquote,
-  'Cmd-Alt-L': toggleOrderedList,
-  'Cmd-L': toggleUnOrderedList
-};
-
-fixShortcut = function(name) {
-  if (isMac) {
-    name = name.replace('Ctrl', 'Cmd');
-  } else {
-    name = name.replace('Cmd', 'Ctrl');
-  }
-  return name;
-};
-
-createIcon = function(name, options) {
-  var el, shortcut;
-  options = options || {};
-  el = document.createElement('a');
-  shortcut = options.shortcut || shortcuts[name];
-  if (shortcut) {
-    shortcut = fixShortcut(shortcut);
-    el.title = shortcut;
-    el.title = el.title.replace('Cmd', '⌘');
-    if (isMac) {
-      el.title = el.title.replace('Alt', '⌥');
-    }
-  }
-  el.className = options.className || 'icon-' + name;
-  return el;
-};
-
-createSep = function() {
-  var el;
-  el = document.createElement('i');
-  el.className = 'separator';
-  el.innerHTML = '|';
-  return el;
-};
+window.Mdex = {};
 
 getState = function(cm, pos) {
   var data, i, ret, stat, text, types, _i, _len;
@@ -289,62 +245,79 @@ _toggleLine = function(cm, name) {
   return cm.focus();
 };
 
-wordCount = function(data) {
-  var count, i, m, pattern, _i, _ref;
-  pattern = /[a-zA-Z0-9_\u0392-\u03c9]+|[\u4E00-\u9FFF\u3400-\u4dbf\uf900-\ufaff\u3040-\u309f\uac00-\ud7af]+/g;
-  m = data.match(pattern);
-  count = 0;
-  if (m === null) {
-    return count;
-  }
-  for (i = _i = 0, _ref = m.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-    if (m[i].charCodeAt(0) >= 0x4E00) {
-      count += m[i].length;
-    } else {
-      count += 1;
-    }
-  }
-  return count;
-};
+Toolbar = require('./toolbar');
 
-Mdex = (function() {
-  Mdex.markdown = function(text) {
+Mdex.Editor = (function() {
+  Editor.markdown = function(text) {
     return marked(text);
   };
 
-  Mdex.toggleBold = toggleBold;
+  Editor.toggleBold = toggleBold;
 
-  Mdex.toggleItalic = toggleItalic;
+  Editor.toggleItalic = toggleItalic;
 
-  Mdex.toggleBlockquote = toggleBlockquote;
+  Editor.toggleBlockquote = toggleBlockquote;
 
-  Mdex.toggleUnOrderedList = toggleUnOrderedList;
+  Editor.toggleUnOrderedList = toggleUnOrderedList;
 
-  Mdex.toggleOrderedList = toggleOrderedList;
+  Editor.toggleOrderedList = toggleOrderedList;
 
-  Mdex.drawLink = drawLink;
+  Editor.drawLink = drawLink;
 
-  Mdex.drawImage = drawImage;
+  Editor.drawImage = drawImage;
 
-  Mdex.undo = undo;
+  Editor.undo = undo;
 
-  Mdex.redo = redo;
+  Editor.redo = redo;
 
-  Mdex.toggleFullScreen = toggleFullScreen;
+  Editor.toggleFullScreen = toggleFullScreen;
 
-  Mdex.prototype.toggleBold = function() {
+  Editor.prototype.toggleBlockquote = function() {
+    return toggleBlockquote(this);
+  };
+
+  Editor.prototype.toggleUnOrderedList = function() {
+    return toggleUnOrderedList(this);
+  };
+
+  Editor.prototype.toggleOrderedList = function() {
+    return toggleOrderedList(this);
+  };
+
+  Editor.prototype.drawLink = function() {
+    return drawLink(this);
+  };
+
+  Editor.prototype.drawImage = function() {
+    return drawImage(this);
+  };
+
+  Editor.prototype.undo = function() {
+    return undo(this);
+  };
+
+  Editor.prototype.redo = function() {
+    return redo(this);
+  };
+
+  toggleFullScreen = function() {
+    return toggleFullScreen(this);
+  };
+
+  Editor.prototype.toggleBold = function() {
     return toggleBold(this);
   };
 
-  Mdex.prototype.toggleItalic = function() {
+  Editor.prototype.toggleItalic = function() {
     return toggleItalic(this);
   };
 
-  function Mdex(_arg) {
-    var container, _ref;
-    _ref = _arg != null ? _arg : {}, container = _ref.container, this.toolbar = _ref.toolbar, this.status = _ref.status;
+  function Editor(_arg) {
+    var container, toolbar, _ref;
+    _ref = _arg != null ? _arg : {}, container = _ref.container, toolbar = _ref.toolbar, this.status = _ref.status;
     this.toggleItalic = __bind(this.toggleItalic, this);
     this.toggleBold = __bind(this.toggleBold, this);
+    this.toolbarOption = toolbar;
     if (container instanceof HTMLElement) {
       this.container = container;
     } else if (typeof container === 'string') {
@@ -354,23 +327,24 @@ Mdex = (function() {
     }
   }
 
-  Mdex.prototype.render = function() {
-    var $preview, el, key, keyMaps, _fn, _i, _len;
+  Editor.prototype.render = function() {
+    var $preview, el, key, keyMaps, _fn, _i, _len, _ref;
     if (this._rendered) {
       return;
     }
     el = this.container.querySelector('.editor');
     keyMaps = {};
     keyMaps["Enter"] = "newlineAndIndentContinueMarkdownList";
+    _ref = Mdex.shortcuts;
     _fn = (function(_this) {
       return function(key) {
-        return keyMaps[fixShortcut(key)] = function(cm) {
-          return shortcuts[key](_this);
+        return keyMaps[Mdex.fixShortcut(key)] = function(cm) {
+          return Mdex.shortcuts[key](_this);
         };
       };
     })(this);
-    for (_i = 0, _len = shortcuts.length; _i < _len; _i++) {
-      key = shortcuts[_i];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      key = _ref[_i];
       _fn(key);
     }
     this.codemirror = CodeMirror.fromTextArea(el, {
@@ -380,11 +354,8 @@ Mdex = (function() {
       lineNumbers: false,
       extraKeys: keyMaps
     });
-    if (this.toolbar !== false) {
+    if (this.toolbarOption !== false) {
       this.createToolbar();
-    }
-    if (this.status !== false) {
-      this.createStatusbar();
     }
     $preview = $(this.container.querySelector('.preview'));
     this.codemirror.on('update', (function(_this) {
@@ -395,158 +366,45 @@ Mdex = (function() {
     return this._rendered = true;
   };
 
-  Mdex.prototype.onPreviewUpdate = function(text) {
+  Editor.prototype.onPreviewUpdate = function(text) {
     return marked(text);
   };
 
-  Mdex.prototype.getCodemirror = function() {
-    return this.codemirror;
-  };
-
-  Mdex.prototype.getContent = function() {
-    return this.getCodemirror().getValue();
-  };
-
-  Mdex.prototype.createToolbar = function(items) {
-    var bar, cm, cmWrapper, i, item, _fn, _i, _len;
-    items = items != null ? items : this.toolbar;
-    if (!items || items.length === 0) {
-      return;
+  Editor.prototype.createToolbar = function() {
+    var item, items, _i, _len;
+    this.toolbar = new Toolbar(this);
+    items = this.toolbarOption;
+    for (_i = 0, _len = items.length; _i < _len; _i++) {
+      item = items[_i];
+      this.toolbar.addButton(item);
     }
-    bar = document.createElement('div');
-    bar.className = 'editor-toolbar';
-    this._toolbar = {};
-    _fn = (function(_this) {
-      return function(item) {
-        var el, _ref;
-        el = item.name ? createIcon(item.name, item) : item === '|' ? createSep() : item.el ? item.el : createIcon(item);
-        if (item.action) {
-          if ((typeof item.action) === 'function') {
-            el.onclick = function(e) {
-              return item.action(_this);
-            };
-          } else if ((typeof item.action) === 'string') {
-            el.href = item.action;
-            el.target = '_blank';
-          }
-        }
-        _this._toolbar[(_ref = item.name) != null ? _ref : item] = el;
-        return bar.appendChild(el);
-      };
-    })(this);
-    for (i = _i = 0, _len = items.length; _i < _len; i = ++_i) {
-      item = items[i];
-      _fn(item);
-    }
-    cm = this.codemirror;
-    cm.on('cursorActivity', (function(_this) {
-      return function() {
-        var key, stat, _j, _len1, _ref, _results;
-        stat = getState(cm);
-        _ref = _this._toolbar;
-        _results = [];
-        for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-          key = _ref[_j];
-          _results.push((function(key) {
-            var el;
-            el = _this._toolbar[key];
-            if (stat[key]) {
-              return el.className += ' active';
-            } else {
-              return el.className = el.className.replace(/\s*active\s*/g, '');
-            }
-          })(key));
-        }
-        return _results;
-      };
-    })(this));
-    cmWrapper = cm.getWrapperElement();
-    cmWrapper.parentNode.insertBefore(bar, cmWrapper);
-    return bar;
+    return this.toolbar.appendToCodemirror(this.codemirror);
   };
 
-  Mdex.prototype.createStatusbar = function(status) {
-    var bar, cm, cmWrapper, i, name, pos, _fn, _i, _len;
-    status = this.status;
-    if (!status || status.length === 0) {
-      return;
-    }
-    bar = document.createElement('div');
-    bar.className = 'editor-statusbar';
-    pos = null;
-    cm = this.codemirror;
-    _fn = (function(_this) {
-      return function(name) {
-        var el;
-        el = document.createElement('span');
-        el.className = name;
-        if (name === 'words') {
-          el.innerHTML = '0';
-          cm.on('update', function() {
-            return el.innerHTML = wordCount(cm.getValue());
-          });
-        } else if (name === 'lines') {
-          console.log;
-          el.innerHTML = '0';
-          cm.on('update', function() {
-            return el.innerHTML = cm.lineCount();
-          });
-        } else if (name === 'cursor') {
-          el.innerHTML = '0:0';
-          cm.on('cursorActivity', function() {
-            pos = cm.getCursor();
-            return el.innerHTML = pos.line + ':' + pos.ch;
-          });
-        }
-        return bar.appendChild(el);
-      };
-    })(this);
-    for (i = _i = 0, _len = status.length; _i < _len; i = ++_i) {
-      name = status[i];
-      _fn(name);
-    }
-    cmWrapper = this.codemirror.getWrapperElement();
-    cmWrapper.parentNode.insertBefore(bar, cmWrapper.nextSibling);
-    return bar;
-  };
-
-  Mdex.prototype.toggleBlockquote = function() {
-    return toggleBlockquote(this);
-  };
-
-  Mdex.prototype.toggleUnOrderedList = function() {
-    return toggleUnOrderedList(this);
-  };
-
-  Mdex.prototype.toggleOrderedList = function() {
-    return toggleOrderedList(this);
-  };
-
-  Mdex.prototype.drawLink = function() {
-    return drawLink(this);
-  };
-
-  Mdex.prototype.drawImage = function() {
-    return drawImage(this);
-  };
-
-  Mdex.prototype.undo = function() {
-    return undo(this);
-  };
-
-  Mdex.prototype.redo = function() {
-    return redo(this);
-  };
-
-  toggleFullScreen = function() {
-    return toggleFullScreen(this);
-  };
-
-  return Mdex;
+  return Editor;
 
 })();
 
-Mdex.toolbar = [
+Mdex.shortcuts = {
+  'Cmd-B': toggleBold,
+  'Cmd-I': toggleItalic,
+  'Cmd-K': drawLink,
+  'Cmd-Alt-I': drawImage,
+  "Cmd-'": toggleBlockquote,
+  'Cmd-Alt-L': toggleOrderedList,
+  'Cmd-L': toggleUnOrderedList
+};
+
+Mdex.fixShortcut = function(name) {
+  if (isMac) {
+    name = name.replace('Ctrl', 'Cmd');
+  } else {
+    name = name.replace('Cmd', 'Ctrl');
+  }
+  return name;
+};
+
+Mdex.defaultToolbar = [
   {
     name: 'bold',
     action: toggleBold
@@ -580,7 +438,129 @@ Mdex.toolbar = [
   }
 ];
 
-window.Mdex = Mdex;
+
+},{"./toolbar":2}],2:[function(require,module,exports){
+var Toolbar, createIcon, createSep, getState;
+
+createIcon = function(name, options) {
+  var el, shortcut;
+  options = options || {};
+  el = document.createElement('a');
+  shortcut = options.shortcut || Mdex.shortcuts[name];
+  if (shortcut) {
+    shortcut = Mdex.fixShortcut(shortcut);
+    el.title = shortcut;
+    el.title = el.title.replace('Cmd', '⌘');
+    if (isMac) {
+      el.title = el.title.replace('Alt', '⌥');
+    }
+  }
+  el.className = options.className || 'icon-' + name;
+  return el;
+};
+
+createSep = function() {
+  var el;
+  el = document.createElement('i');
+  el.className = 'separator';
+  el.innerHTML = '|';
+  return el;
+};
+
+getState = function(cm, pos) {
+  var data, i, ret, stat, text, types, _i, _len;
+  pos = pos || cm.getCursor('start');
+  stat = cm.getTokenAt(pos);
+  if (!stat.type) {
+    return {};
+  }
+  types = stat.type.split(' ');
+  ret = {};
+  data = null;
+  text = null;
+  for (i = _i = 0, _len = types.length; _i < _len; i = ++_i) {
+    data = types[i];
+    if (data === 'strong') {
+      ret.bold = true;
+    } else if (data === 'variable-2') {
+      text = cm.getLine(pos.line);
+      if (/^\s*\d+\.\s/.test(text)) {
+        ret['ordered-list'] = true;
+      } else {
+        ret['unordered-list'] = true;
+      }
+    } else if (data === 'atom') {
+      ret.quote = true;
+    } else if (data === 'em') {
+      ret.italic = true;
+    }
+  }
+  return ret;
+};
+
+module.exports = Toolbar = (function() {
+  function Toolbar(parent) {
+    this.parent = parent;
+    this._bar = document.createElement('div');
+    this._bar.className = 'editor-toolbar';
+    this._toolbar = {};
+  }
+
+  Toolbar.prototype.createElement = function(item) {
+    var el;
+    el = item.name ? createIcon(item.name, item) : item === '|' ? createSep() : item.el ? item.el : createIcon(item);
+    if (item.action) {
+      if ((typeof item.action) === 'function') {
+        el.onclick = (function(_this) {
+          return function(e) {
+            return item.action(_this.parent);
+          };
+        })(this);
+      }
+    }
+    return el;
+  };
+
+  Toolbar.prototype.addButton = function(item) {
+    var el, name, _ref;
+    el = this.createElement(item);
+    name = (_ref = item.name) != null ? _ref : item;
+    this._toolbar[name] = el;
+    return this._bar.appendChild(el);
+  };
+
+  Toolbar.prototype.appendToCodemirror = function() {
+    var cm, cmWrapper;
+    cm = this.parent.codemirror;
+    cm.on('cursorActivity', (function(_this) {
+      return function() {
+        var key, stat, _i, _len, _ref, _results;
+        stat = getState(cm);
+        _ref = _this._toolbar;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          key = _ref[_i];
+          _results.push((function(key) {
+            var el;
+            el = _this._toolbar[key];
+            if (stat[key]) {
+              return el.className += ' active';
+            } else {
+              return el.className = el.className.replace(/\s*active\s*/g, '');
+            }
+          })(key));
+        }
+        return _results;
+      };
+    })(this));
+    cmWrapper = cm.getWrapperElement();
+    cmWrapper.parentNode.insertBefore(this._bar, cmWrapper);
+    return this._bar;
+  };
+
+  return Toolbar;
+
+})();
 
 
 },{}]},{},[1])
