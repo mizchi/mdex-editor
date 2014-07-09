@@ -330,14 +330,3 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
     visibility: hidden;
   }
 }
-
-/* editor wrapper */
-.mdex-container {
-  max-width: 800px;
-  padding: 10px;
-  margin: 10px auto;
-}
-.mdex-editor-container {
-  float: left;
-  width: 450px;
-}

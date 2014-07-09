@@ -162,6 +162,14 @@ Mdex.togglePreview = (editor) ->
   text = cm.getValue()
   preview.innerHTML = parse(text)
 
+setLine = (cm, line, text) ->
+  size = cm.getLine(line).length
+
+  startPoint = line: line, ch: 0
+  endPoint   = line: line, ch: size - 1
+
+  cm.replaceRange text, startPoint, endPoint
+
 _replaceSelection = (cm, active, start, end) ->
   text = null
   startPoint = cm.getCursor('start')
@@ -197,9 +205,10 @@ _toggleLine = (cm, name) ->
   for i in [startPoint.line..endPoint.line]
     do (i) =>
       text = cm.getLine(i)
-      if (stat[name])
+      if stat[name]
         text = text.replace(repl[name], '$1')
       else
         text = map[name] + text
-      cm.setLine(i, text)
+      # cm.setLine(i, text)
+      setLine(cm, i, text)
   cm.focus()

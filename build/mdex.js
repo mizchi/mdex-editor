@@ -252,7 +252,7 @@ module.exports = Toolbar = (function() {
 
 
 },{}],3:[function(require,module,exports){
-var getState, _replaceSelection, _toggleLine;
+var getState, setLine, _replaceSelection, _toggleLine;
 
 getState = Mdex.getState = function(cm, pos) {
   var data, i, ret, stat, text, types, _i, _len;
@@ -442,6 +442,20 @@ Mdex.togglePreview = function(editor) {
   return preview.innerHTML = parse(text);
 };
 
+setLine = function(cm, line, text) {
+  var endPoint, size, startPoint;
+  size = cm.getLine(line).length;
+  startPoint = {
+    line: line,
+    ch: 0
+  };
+  endPoint = {
+    line: line,
+    ch: size - 1
+  };
+  return cm.replaceRange(text, startPoint, endPoint);
+};
+
 _replaceSelection = function(cm, active, start, end) {
   var endPoint, startPoint, text;
   text = null;
@@ -486,7 +500,7 @@ _toggleLine = function(cm, name) {
       } else {
         text = map[name] + text;
       }
-      return cm.setLine(i, text);
+      return setLine(cm, i, text);
     };
   })(this);
   for (i = _i = _ref = startPoint.line, _ref1 = endPoint.line; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; i = _ref <= _ref1 ? ++_i : --_i) {
