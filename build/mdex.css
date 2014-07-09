@@ -330,3 +330,18 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
     visibility: hidden;
   }
 }
+
+.mdex-container {
+  overflow: hidden;
+}
+
+.mdex-container .mdex-editor-container {
+  float: left;
+  width: 60%;
+}
+
+.mdex-container .preview-container {
+  float: right;
+  width: 40%;
+}
+
