@@ -252,7 +252,7 @@ module.exports = Toolbar = (function() {
 
 
 },{}],3:[function(require,module,exports){
-var getState, setLine, _replaceSelection, _toggleLine;
+var getState, setLine, wrapTextWith, _replaceSelection, _toggleLine;
 
 getState = Mdex.getState = function(cm, pos) {
   var data, i, ret, stat, text, types, _i, _len;
@@ -285,91 +285,30 @@ getState = Mdex.getState = function(cm, pos) {
   return ret;
 };
 
-Mdex.toggleFullScreen = function(editor) {
-  var cancel, doc, el, isFull, request;
-  el = editor.codemirror.getWrapperElement();
-  doc = document;
-  isFull = doc.fullScreen || doc.mozFullScreen || doc.webkitFullScreen;
-  request = function() {
-    if (el.requestFullScreen) {
-      return el.requestFullScreen();
-    } else if (el.mozRequestFullScreen) {
-      return el.mozRequestFullScreen();
-    } else if (el.webkitRequestFullScreen) {
-      return el.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-    }
-  };
-  cancel = function() {
-    if (doc.cancelFullScreen) {
-      return doc.cancelFullScreen();
-    } else if (doc.mozCancelFullScreen) {
-      return doc.mozCancelFullScreen();
-    } else if (doc.webkitCancelFullScreen) {
-      return doc.webkitCancelFullScreen();
-    }
-  };
-  if (!isFull) {
-    return request();
-  } else if (cancel) {
-    return cancel();
-  }
-};
-
-Mdex.toggleBold = function(editor) {
-  var cm, end, endPoint, start, startPoint, stat, text;
-  cm = editor.codemirror;
-  stat = getState(cm);
-  text = null;
-  start = '**';
-  end = '**';
-  startPoint = cm.getCursor('start');
-  endPoint = cm.getCursor('end');
-  if (stat.bold) {
-    text = cm.getLine(startPoint.line);
-    start = text.slice(0, startPoint.ch);
-    end = text.slice(startPoint.ch);
-    start = start.replace(/^(.*)?(\*|\_){2}(\S+.*)?$/, '$1$3');
-    end = end.replace(/^(.*\S+)?(\*|\_){2}(\s+.*)?$/, '$1$3');
-    startPoint.ch -= 2;
-    endPoint.ch += 2;
-    cm.replaceRange(end, startPoint, endPoint);
-  } else {
+wrapTextWith = function(wrapper) {
+  var end, size, start;
+  start = wrapper;
+  end = wrapper;
+  size = wrapper.length;
+  return function(editor) {
+    var cm, endPoint, startPoint, text;
+    cm = editor.codemirror;
+    startPoint = cm.getCursor('start');
+    endPoint = cm.getCursor('end');
     text = cm.getSelection();
     cm.replaceSelection(start + text + end);
-    startPoint.ch += 2;
-    endPoint.ch += 2;
-  }
-  cm.setSelection(startPoint, endPoint);
-  return cm.focus();
+    startPoint.ch += size;
+    endPoint.ch += size;
+    cm.setSelection(startPoint, endPoint);
+    return cm.focus();
+  };
 };
 
-Mdex.toggleItalic = function(editor) {
-  var cm, end, endPoint, start, startPoint, stat, text;
-  cm = editor.codemirror;
-  stat = getState(cm);
-  text = null;
-  start = '*';
-  end = '*';
-  startPoint = cm.getCursor('start');
-  endPoint = cm.getCursor('end');
-  if (stat.italic) {
-    text = cm.getLine(startPoint.line);
-    start = text.slice(0, startPoint.ch);
-    end = text.slice(startPoint.ch);
-    start = start.replace(/^(.*)?(\*|\_)(\S+.*)?$/, '$1$3');
-    end = end.replace(/^(.*\S+)?(\*|\_)(\s+.*)?$/, '$1$3');
-    startPoint.ch -= 1;
-    endPoint.ch += 1;
-    cm.replaceRange(end, startPoint, endPoint);
-  } else {
-    text = cm.getSelection();
-    cm.replaceSelection(start + text + end);
-    startPoint.ch += 1;
-    endPoint.ch += 1;
-  }
-  cm.setSelection(startPoint, endPoint);
-  return cm.focus();
-};
+Mdex.toggleBold = wrapTextWith('**');
+
+Mdex.toggleItalic = wrapTextWith('*');
+
+Mdex.toggleStrikeThrough = wrapTextWith('~~');
 
 Mdex.toggleBlockquote = function(editor) {
   var cm;
@@ -393,14 +332,14 @@ Mdex.drawLink = function(editor) {
   var cm, stat;
   cm = editor.codemirror;
   stat = getState(cm);
-  return _replaceSelection(cm, stat.link, '[', '](http:#)');
+  return _replaceSelection(cm, stat.link, '[', '](http://)');
 };
 
 Mdex.drawImage = function(editor) {
   var cm, stat;
   cm = editor.codemirror;
   stat = getState(cm);
-  return _replaceSelection(cm, stat.image, '![', '](http:#)');
+  return _replaceSelection(cm, stat.image, '![', '](http://)');
 };
 
 Mdex.undo = function(editor) {
@@ -415,31 +354,6 @@ Mdex.redo = function(editor) {
   cm = editor.codemirror;
   cm.redo();
   return cm.focus();
-};
-
-Mdex.togglePreview = function(editor) {
-  var cm, parse, preview, text, toolbar, wrapper;
-  toolbar = editor.toolbar.preview;
-  parse = editor.constructor.markdown;
-  cm = editor.codemirror;
-  wrapper = cm.getWrapperElement();
-  preview = wrapper.lastChild;
-  if (!/editor-preview/.test(preview.className)) {
-    preview = document.createElement('div');
-    preview.className = 'editor-preview';
-    wrapper.appendChild(preview);
-  }
-  if (/editor-preview-active/.test(preview.className)) {
-    preview.className = preview.className.replace(/\s*editor-preview-active\s*/g, '');
-    toolbar.className = toolbar.className.replace(/\s*active\s*/g, '');
-  } else {
-    setTimeout((function() {
-      return preview.className += ' editor-preview-active';
-    }), 1);
-    toolbar.className += ' active';
-  }
-  text = cm.getValue();
-  return preview.innerHTML = parse(text);
 };
 
 setLine = function(cm, line, text) {
@@ -465,7 +379,7 @@ _replaceSelection = function(cm, active, start, end) {
     text = cm.getLine(startPoint.line);
     start = text.slice(0, startPoint.ch);
     end = text.slice(startPoint.ch);
-    cm.setLine(startPoint.line, start + end);
+    setLine(cm, startPoint.line, start + end);
   } else {
     text = cm.getSelection();
     cm.replaceSelection(start + text + end);
