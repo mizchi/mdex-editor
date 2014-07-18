@@ -1,13 +1,19 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var Toolbar;
-
 window.Mdex = {};
 
-require('./utils');
+require('./mdex/utils');
 
-Mdex.Toolbar = Toolbar = require('./toolbar');
+Mdex.Toolbar = require('./mdex/toolbar');
 
-Mdex.Editor = (function() {
+Mdex.Editor = require('./mdex/editor');
+
+
+},{"./mdex/editor":2,"./mdex/toolbar":3,"./mdex/utils":4}],2:[function(require,module,exports){
+var Editor, Toolbar;
+
+Toolbar = require('./toolbar');
+
+module.exports = Editor = (function() {
   function Editor(_arg) {
     var container, toolbar, _ref;
     _ref = _arg != null ? _arg : {}, container = _ref.container, toolbar = _ref.toolbar, this.status = _ref.status;
@@ -65,7 +71,7 @@ Mdex.Editor = (function() {
 })();
 
 
-},{"./toolbar":2,"./utils":3}],2:[function(require,module,exports){
+},{"./toolbar":3}],3:[function(require,module,exports){
 var Toolbar, createSep,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -256,7 +262,7 @@ Toolbar.registerButton('unordered-list', Mdex.Buttons.UnorderedList);
 Toolbar.registerButton('ordered-list', Mdex.Buttons.OrderedList);
 
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 var getState, setLine, wrapTextWith, _replaceSelection, _toggleLine;
 
 getState = Mdex.getState = function(cm, pos) {
