@@ -6,8 +6,12 @@ createSep = ->
   el.innerHTML = '|'
   el
 
+Button = require './buttons/_base/button'
+
 module.exports = class Toolbar
   @registerButton: (name, buttonClass) ->
+    throw name+' is not button class' unless buttonClass?
+
     @_buttonClasses ?= {}
     @_buttonClasses[name] = buttonClass
 
@@ -33,14 +37,3 @@ module.exports = class Toolbar
     cmWrapper.parentNode.insertBefore(@el, cmWrapper)
     return @el
 
-Bold = require './buttons/bold'
-Italic = require './buttons/italic'
-Blockquote = require './buttons/blockquote'
-UnorderedList = require './buttons/unordered-list'
-OrderedList = require './buttons/ordered-list'
-
-Toolbar.registerButton 'bold',           Bold
-Toolbar.registerButton 'italic',         Italic
-Toolbar.registerButton 'blockquote',     Blockquote
-Toolbar.registerButton 'unordered-list', UnorderedList
-Toolbar.registerButton 'ordered-list',   OrderedList

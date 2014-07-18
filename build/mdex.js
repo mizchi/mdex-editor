@@ -19,8 +19,10 @@ Mdex.Toolbar.registerButton('unordered-list', require('./mdex/buttons/unordered-
 
 Mdex.Toolbar.registerButton('ordered-list', require('./mdex/buttons/ordered-list'));
 
+Mdex.Toolbar.registerButton('strike', require('./mdex/buttons/strike'));
 
-},{"./mdex/buttons/_base/button":2,"./mdex/buttons/blockquote":3,"./mdex/buttons/bold":4,"./mdex/buttons/italic":5,"./mdex/buttons/ordered-list":6,"./mdex/buttons/unordered-list":7,"./mdex/editor":8,"./mdex/toolbar":9,"./mdex/utils":10}],2:[function(require,module,exports){
+
+},{"./mdex/buttons/_base/button":2,"./mdex/buttons/blockquote":3,"./mdex/buttons/bold":4,"./mdex/buttons/italic":5,"./mdex/buttons/ordered-list":6,"./mdex/buttons/strike":7,"./mdex/buttons/unordered-list":8,"./mdex/editor":9,"./mdex/toolbar":10,"./mdex/utils":11}],2:[function(require,module,exports){
 var Button,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -161,6 +163,29 @@ module.exports = OrderedList = (function(_super) {
 
 
 },{"./_base/button":2}],7:[function(require,module,exports){
+var Button, Strike,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+Button = require('./_base/button');
+
+module.exports = Strike = (function(_super) {
+  __extends(Strike, _super);
+
+  function Strike() {
+    return Strike.__super__.constructor.apply(this, arguments);
+  }
+
+  Strike.prototype.template = '---';
+
+  Strike.prototype.onClick = Mdex.toggleStrikeThrough;
+
+  return Strike;
+
+})(Button);
+
+
+},{"./_base/button":2}],8:[function(require,module,exports){
 var Button, UnorderedList,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -183,7 +208,7 @@ module.exports = UnorderedList = (function(_super) {
 })(Button);
 
 
-},{"./_base/button":2}],8:[function(require,module,exports){
+},{"./_base/button":2}],9:[function(require,module,exports){
 var Editor, Toolbar;
 
 Toolbar = require('./toolbar');
@@ -246,8 +271,8 @@ module.exports = Editor = (function() {
 })();
 
 
-},{"./toolbar":9}],9:[function(require,module,exports){
-var Blockquote, Bold, Italic, OrderedList, Toolbar, UnorderedList, createSep;
+},{"./toolbar":10}],10:[function(require,module,exports){
+var Button, Toolbar, createSep;
 
 if (Mdex.Buttons == null) {
   Mdex.Buttons = {};
@@ -261,8 +286,13 @@ createSep = function() {
   return el;
 };
 
+Button = require('./buttons/_base/button');
+
 module.exports = Toolbar = (function() {
   Toolbar.registerButton = function(name, buttonClass) {
+    if (buttonClass == null) {
+      throw name + ' is not button class';
+    }
     if (this._buttonClasses == null) {
       this._buttonClasses = {};
     }
@@ -307,28 +337,8 @@ module.exports = Toolbar = (function() {
 
 })();
 
-Bold = require('./buttons/bold');
 
-Italic = require('./buttons/italic');
-
-Blockquote = require('./buttons/blockquote');
-
-UnorderedList = require('./buttons/unordered-list');
-
-OrderedList = require('./buttons/ordered-list');
-
-Toolbar.registerButton('bold', Bold);
-
-Toolbar.registerButton('italic', Italic);
-
-Toolbar.registerButton('blockquote', Blockquote);
-
-Toolbar.registerButton('unordered-list', UnorderedList);
-
-Toolbar.registerButton('ordered-list', OrderedList);
-
-
-},{"./buttons/blockquote":3,"./buttons/bold":4,"./buttons/italic":5,"./buttons/ordered-list":6,"./buttons/unordered-list":7}],10:[function(require,module,exports){
+},{"./buttons/_base/button":2}],11:[function(require,module,exports){
 var getState, setLine, wrapTextWith, _replaceSelection, _toggleLine;
 
 getState = Mdex.getState = function(cm, pos) {

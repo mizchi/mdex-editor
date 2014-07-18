@@ -9,3 +9,5 @@ Mdex.Toolbar.registerButton 'italic',         require './mdex/buttons/italic'
 Mdex.Toolbar.registerButton 'blockquote',     require './mdex/buttons/blockquote'
 Mdex.Toolbar.registerButton 'unordered-list', require './mdex/buttons/unordered-list'
 Mdex.Toolbar.registerButton 'ordered-list',   require './mdex/buttons/ordered-list'
+
+Mdex.Toolbar.registerButton 'strike',         require './mdex/buttons/strike'
