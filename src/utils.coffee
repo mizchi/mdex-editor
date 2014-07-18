@@ -125,6 +125,5 @@ _toggleLine = (cm, name) ->
         text = text.replace(repl[name], '$1')
       else
         text = map[name] + text
-      # cm.setLine(i, text)
       setLine(cm, i, text)
   cm.focus()

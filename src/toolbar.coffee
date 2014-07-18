@@ -1,71 +1,75 @@
-class Button
-  constructor: ->
-    @el = document.createElement('a')
-    @$el = $(@el)
+Mdex.Buttons ?= {}
 
-  onClick: (editor) =>
+class Mdex.Buttons.Base extends Bn.View
+  tagName: 'a'
+  @extend: (obj) ->
+    c = class extends QcreateEditor.Button
+    for key, val of obj then c.prototype[key] = val
+    c
 
-createIcon = (name, options) ->
-  options = options or {}
-  el = document.createElement('a')
+  constructor: (@toolbar) ->
+    super document.createElement(@tagName)
+    @$el.on 'click', @$el,  =>
+      @onClick(@toolbar.parent)
 
-  shortcut = options.shortcut or Mdex.shortcuts[name]
-  if shortcut
-    shortcut = Mdex.fixShortcut(shortcut)
-    el.title = shortcut
-    el.title = el.title.replace('Cmd', '⌘')
-    if /Mac/.test(navigator.platform)
-      el.title = el.title.replace('Alt', '⌥')
+  onClick: ->
+    throw 'override me'
 
-  el.className = options.className or 'icon-' + name
-  return el
+class Mdex.Buttons.Bold extends Mdex.Buttons.Base
+  template: 'B'
+  onClick: Mdex.toggleBold
+
+class Mdex.Buttons.Italic extends Mdex.Buttons.Base
+  template: 'I'
+  onClick: Mdex.toggleItalic
+
+class Mdex.Buttons.Blockquote extends Mdex.Buttons.Base
+  template: 'Qt'
+  onClick: Mdex.toggleBlockquote
+
+class Mdex.Buttons.UnorderedList extends Mdex.Buttons.Base
+  template: '*.'
+  onClick: Mdex.toggleUnOrderedList
+
+class Mdex.Buttons.OrderedList extends Mdex.Buttons.Base
+  template: '1.'
+  onClick: Mdex.toggleUnOrderedList
 
 createSep = ->
   el = document.createElement('i')
   el.className = 'separator'
   el.innerHTML = '|'
-  return el
+  el
 
 module.exports = class Toolbar
+  @registerButton: (name, buttonClass) ->
+    @_buttonClasses ?= {}
+    @_buttonClasses[name] = buttonClass
+
+  @getButtonClass: (name) -> @_buttonClasses[name]
+
   constructor: (@parent) ->
-    @_bar = document.createElement('div')
-    @_bar.className = 'editor-toolbar'
-    @_toolbar = {}
+    @el = document.createElement('div')
+    @el.className = 'editor-toolbar'
 
-  createElement: (item) ->
-    el =
-      if item.name
-        createIcon(item.name, item)
-      else if item is '|'
-        createSep()
-      else if item.el
-        item.el
-      else
-        createIcon(item)
-    if item.action
-      if (typeof item.action) is 'function'
-        el.onclick = (e) =>
-          item.action(@parent)
-    el
+  createElement: (name) ->
+    if name is '|' then return createSep()
+    buttonClass = @constructor.getButtonClass(name)
+    btn = new buttonClass @
+    btn.$el.get(0)
 
-  addButton: (item) ->
-    el = @createElement(item)
-    name = item.name ? item
-
-    @_toolbar[name] = el
-    @_bar.appendChild(el)
+  addButton: (buttonName) ->
+    el = @createElement(buttonName)
+    @el.appendChild(el)
 
   appendToCodemirror: ->
     cm = @parent.codemirror
-    cm.on 'cursorActivity', =>
-      stat = Mdex.getState(cm)
-      for key in @_toolbar then do (key) =>
-        el = @_toolbar[key]
-        if stat[key]
-          el.className += ' active'
-        else
-          el.className = el.className.replace(/\s*active\s*/g, '')
-
     cmWrapper = cm.getWrapperElement()
-    cmWrapper.parentNode.insertBefore(@_bar, cmWrapper)
-    return @_bar
+    cmWrapper.parentNode.insertBefore(@el, cmWrapper)
+    return @el
+
+Toolbar.registerButton 'bold',           Mdex.Buttons.Bold
+Toolbar.registerButton 'italic',         Mdex.Buttons.Italic
+Toolbar.registerButton 'blockquote',     Mdex.Buttons.Blockquote
+Toolbar.registerButton 'unordered-list', Mdex.Buttons.UnorderedList
+Toolbar.registerButton 'ordered-list',   Mdex.Buttons.OrderedList
