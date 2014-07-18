@@ -7,8 +7,183 @@ Mdex.Toolbar = require('./mdex/toolbar');
 
 Mdex.Editor = require('./mdex/editor');
 
+Mdex.Button = require('./mdex/buttons/_base/button');
 
-},{"./mdex/editor":2,"./mdex/toolbar":3,"./mdex/utils":4}],2:[function(require,module,exports){
+Mdex.Toolbar.registerButton('bold', require('./mdex/buttons/bold'));
+
+Mdex.Toolbar.registerButton('italic', require('./mdex/buttons/italic'));
+
+Mdex.Toolbar.registerButton('blockquote', require('./mdex/buttons/blockquote'));
+
+Mdex.Toolbar.registerButton('unordered-list', require('./mdex/buttons/unordered-list'));
+
+Mdex.Toolbar.registerButton('ordered-list', require('./mdex/buttons/ordered-list'));
+
+
+},{"./mdex/buttons/_base/button":2,"./mdex/buttons/blockquote":3,"./mdex/buttons/bold":4,"./mdex/buttons/italic":5,"./mdex/buttons/ordered-list":6,"./mdex/buttons/unordered-list":7,"./mdex/editor":8,"./mdex/toolbar":9,"./mdex/utils":10}],2:[function(require,module,exports){
+var Button,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+module.exports = Button = (function(_super) {
+  __extends(Button, _super);
+
+  Button.prototype.tagName = 'a';
+
+  Button.extend = function(obj) {
+    var c, key, val;
+    c = (function(_super1) {
+      __extends(_Class, _super1);
+
+      function _Class() {
+        return _Class.__super__.constructor.apply(this, arguments);
+      }
+
+      return _Class;
+
+    })(QcreateEditor.Button);
+    for (key in obj) {
+      val = obj[key];
+      c.prototype[key] = val;
+    }
+    return c;
+  };
+
+  function Button(toolbar) {
+    this.toolbar = toolbar;
+    Button.__super__.constructor.call(this, document.createElement(this.tagName));
+    this.$el.on('click', this.$el, (function(_this) {
+      return function() {
+        return _this.onClick(_this.toolbar.parent);
+      };
+    })(this));
+  }
+
+  Button.prototype.onClick = function() {
+    throw 'override me';
+  };
+
+  return Button;
+
+})(Bn.View);
+
+
+},{}],3:[function(require,module,exports){
+var Blockquote, Button,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+Button = require('./_base/button');
+
+module.exports = Blockquote = (function(_super) {
+  __extends(Blockquote, _super);
+
+  function Blockquote() {
+    return Blockquote.__super__.constructor.apply(this, arguments);
+  }
+
+  Blockquote.prototype.template = 'Qt';
+
+  Blockquote.prototype.onClick = Mdex.toggleBlockquote;
+
+  return Blockquote;
+
+})(Button);
+
+
+},{"./_base/button":2}],4:[function(require,module,exports){
+var Bold, Button,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+Button = require('./_base/button');
+
+module.exports = Bold = (function(_super) {
+  __extends(Bold, _super);
+
+  function Bold() {
+    return Bold.__super__.constructor.apply(this, arguments);
+  }
+
+  Bold.prototype.template = 'B';
+
+  Bold.prototype.onClick = Mdex.toggleBold;
+
+  return Bold;
+
+})(Button);
+
+
+},{"./_base/button":2}],5:[function(require,module,exports){
+var Button, Italic,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+Button = require('./_base/button');
+
+module.exports = Italic = (function(_super) {
+  __extends(Italic, _super);
+
+  function Italic() {
+    return Italic.__super__.constructor.apply(this, arguments);
+  }
+
+  Italic.prototype.template = 'I';
+
+  Italic.prototype.onClick = Mdex.toggleItalic;
+
+  return Italic;
+
+})(Button);
+
+
+},{"./_base/button":2}],6:[function(require,module,exports){
+var Button, OrderedList,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+Button = require('./_base/button');
+
+module.exports = OrderedList = (function(_super) {
+  __extends(OrderedList, _super);
+
+  function OrderedList() {
+    return OrderedList.__super__.constructor.apply(this, arguments);
+  }
+
+  OrderedList.prototype.template = '1.';
+
+  OrderedList.prototype.onClick = Mdex.toggleUnOrderedList;
+
+  return OrderedList;
+
+})(Button);
+
+
+},{"./_base/button":2}],7:[function(require,module,exports){
+var Button, UnorderedList,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+Button = require('./_base/button');
+
+module.exports = UnorderedList = (function(_super) {
+  __extends(UnorderedList, _super);
+
+  function UnorderedList() {
+    return UnorderedList.__super__.constructor.apply(this, arguments);
+  }
+
+  UnorderedList.prototype.template = '*.';
+
+  UnorderedList.prototype.onClick = Mdex.toggleUnOrderedList;
+
+  return UnorderedList;
+
+})(Button);
+
+
+},{"./_base/button":2}],8:[function(require,module,exports){
 var Editor, Toolbar;
 
 Toolbar = require('./toolbar');
@@ -71,131 +246,12 @@ module.exports = Editor = (function() {
 })();
 
 
-},{"./toolbar":3}],3:[function(require,module,exports){
-var Toolbar, createSep,
-  __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+},{"./toolbar":9}],9:[function(require,module,exports){
+var Blockquote, Bold, Italic, OrderedList, Toolbar, UnorderedList, createSep;
 
 if (Mdex.Buttons == null) {
   Mdex.Buttons = {};
 }
-
-Mdex.Buttons.Base = (function(_super) {
-  __extends(Base, _super);
-
-  Base.prototype.tagName = 'a';
-
-  Base.extend = function(obj) {
-    var c, key, val;
-    c = (function(_super1) {
-      __extends(_Class, _super1);
-
-      function _Class() {
-        return _Class.__super__.constructor.apply(this, arguments);
-      }
-
-      return _Class;
-
-    })(QcreateEditor.Button);
-    for (key in obj) {
-      val = obj[key];
-      c.prototype[key] = val;
-    }
-    return c;
-  };
-
-  function Base(toolbar) {
-    this.toolbar = toolbar;
-    Base.__super__.constructor.call(this, document.createElement(this.tagName));
-    this.$el.on('click', this.$el, (function(_this) {
-      return function() {
-        return _this.onClick(_this.toolbar.parent);
-      };
-    })(this));
-  }
-
-  Base.prototype.onClick = function() {
-    throw 'override me';
-  };
-
-  return Base;
-
-})(Bn.View);
-
-Mdex.Buttons.Bold = (function(_super) {
-  __extends(Bold, _super);
-
-  function Bold() {
-    return Bold.__super__.constructor.apply(this, arguments);
-  }
-
-  Bold.prototype.template = 'B';
-
-  Bold.prototype.onClick = Mdex.toggleBold;
-
-  return Bold;
-
-})(Mdex.Buttons.Base);
-
-Mdex.Buttons.Italic = (function(_super) {
-  __extends(Italic, _super);
-
-  function Italic() {
-    return Italic.__super__.constructor.apply(this, arguments);
-  }
-
-  Italic.prototype.template = 'I';
-
-  Italic.prototype.onClick = Mdex.toggleItalic;
-
-  return Italic;
-
-})(Mdex.Buttons.Base);
-
-Mdex.Buttons.Blockquote = (function(_super) {
-  __extends(Blockquote, _super);
-
-  function Blockquote() {
-    return Blockquote.__super__.constructor.apply(this, arguments);
-  }
-
-  Blockquote.prototype.template = 'Qt';
-
-  Blockquote.prototype.onClick = Mdex.toggleBlockquote;
-
-  return Blockquote;
-
-})(Mdex.Buttons.Base);
-
-Mdex.Buttons.UnorderedList = (function(_super) {
-  __extends(UnorderedList, _super);
-
-  function UnorderedList() {
-    return UnorderedList.__super__.constructor.apply(this, arguments);
-  }
-
-  UnorderedList.prototype.template = '*.';
-
-  UnorderedList.prototype.onClick = Mdex.toggleUnOrderedList;
-
-  return UnorderedList;
-
-})(Mdex.Buttons.Base);
-
-Mdex.Buttons.OrderedList = (function(_super) {
-  __extends(OrderedList, _super);
-
-  function OrderedList() {
-    return OrderedList.__super__.constructor.apply(this, arguments);
-  }
-
-  OrderedList.prototype.template = '1.';
-
-  OrderedList.prototype.onClick = Mdex.toggleUnOrderedList;
-
-  return OrderedList;
-
-})(Mdex.Buttons.Base);
 
 createSep = function() {
   var el;
@@ -251,18 +307,28 @@ module.exports = Toolbar = (function() {
 
 })();
 
-Toolbar.registerButton('bold', Mdex.Buttons.Bold);
+Bold = require('./buttons/bold');
 
-Toolbar.registerButton('italic', Mdex.Buttons.Italic);
+Italic = require('./buttons/italic');
 
-Toolbar.registerButton('blockquote', Mdex.Buttons.Blockquote);
+Blockquote = require('./buttons/blockquote');
 
-Toolbar.registerButton('unordered-list', Mdex.Buttons.UnorderedList);
+UnorderedList = require('./buttons/unordered-list');
 
-Toolbar.registerButton('ordered-list', Mdex.Buttons.OrderedList);
+OrderedList = require('./buttons/ordered-list');
+
+Toolbar.registerButton('bold', Bold);
+
+Toolbar.registerButton('italic', Italic);
+
+Toolbar.registerButton('blockquote', Blockquote);
+
+Toolbar.registerButton('unordered-list', UnorderedList);
+
+Toolbar.registerButton('ordered-list', OrderedList);
 
 
-},{}],4:[function(require,module,exports){
+},{"./buttons/blockquote":3,"./buttons/bold":4,"./buttons/italic":5,"./buttons/ordered-list":6,"./buttons/unordered-list":7}],10:[function(require,module,exports){
 var getState, setLine, wrapTextWith, _replaceSelection, _toggleLine;
 
 getState = Mdex.getState = function(cm, pos) {

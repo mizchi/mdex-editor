@@ -1,40 +1,5 @@
 Mdex.Buttons ?= {}
 
-class Mdex.Buttons.Base extends Bn.View
-  tagName: 'a'
-  @extend: (obj) ->
-    c = class extends QcreateEditor.Button
-    for key, val of obj then c.prototype[key] = val
-    c
-
-  constructor: (@toolbar) ->
-    super document.createElement(@tagName)
-    @$el.on 'click', @$el,  =>
-      @onClick(@toolbar.parent)
-
-  onClick: ->
-    throw 'override me'
-
-class Mdex.Buttons.Bold extends Mdex.Buttons.Base
-  template: 'B'
-  onClick: Mdex.toggleBold
-
-class Mdex.Buttons.Italic extends Mdex.Buttons.Base
-  template: 'I'
-  onClick: Mdex.toggleItalic
-
-class Mdex.Buttons.Blockquote extends Mdex.Buttons.Base
-  template: 'Qt'
-  onClick: Mdex.toggleBlockquote
-
-class Mdex.Buttons.UnorderedList extends Mdex.Buttons.Base
-  template: '*.'
-  onClick: Mdex.toggleUnOrderedList
-
-class Mdex.Buttons.OrderedList extends Mdex.Buttons.Base
-  template: '1.'
-  onClick: Mdex.toggleUnOrderedList
-
 createSep = ->
   el = document.createElement('i')
   el.className = 'separator'
@@ -68,8 +33,14 @@ module.exports = class Toolbar
     cmWrapper.parentNode.insertBefore(@el, cmWrapper)
     return @el
 
-Toolbar.registerButton 'bold',           Mdex.Buttons.Bold
-Toolbar.registerButton 'italic',         Mdex.Buttons.Italic
-Toolbar.registerButton 'blockquote',     Mdex.Buttons.Blockquote
-Toolbar.registerButton 'unordered-list', Mdex.Buttons.UnorderedList
-Toolbar.registerButton 'ordered-list',   Mdex.Buttons.OrderedList
+Bold = require './buttons/bold'
+Italic = require './buttons/italic'
+Blockquote = require './buttons/blockquote'
+UnorderedList = require './buttons/unordered-list'
+OrderedList = require './buttons/ordered-list'
+
+Toolbar.registerButton 'bold',           Bold
+Toolbar.registerButton 'italic',         Italic
+Toolbar.registerButton 'blockquote',     Blockquote
+Toolbar.registerButton 'unordered-list', UnorderedList
+Toolbar.registerButton 'ordered-list',   OrderedList
