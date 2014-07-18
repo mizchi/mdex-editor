@@ -11,7 +11,6 @@ Button = require './buttons/_base/button'
 module.exports = class Toolbar
   @registerButton: (name, buttonClass) ->
     throw name+' is not button class' unless buttonClass?
-
     @_buttonClasses ?= {}
     @_buttonClasses[name] = buttonClass
 

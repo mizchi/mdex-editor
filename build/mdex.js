@@ -13,16 +13,18 @@ Mdex.Toolbar.registerButton('bold', require('./mdex/buttons/bold'));
 
 Mdex.Toolbar.registerButton('italic', require('./mdex/buttons/italic'));
 
+Mdex.Toolbar.registerButton('strike', require('./mdex/buttons/strike'));
+
 Mdex.Toolbar.registerButton('blockquote', require('./mdex/buttons/blockquote'));
 
 Mdex.Toolbar.registerButton('unordered-list', require('./mdex/buttons/unordered-list'));
 
 Mdex.Toolbar.registerButton('ordered-list', require('./mdex/buttons/ordered-list'));
 
-Mdex.Toolbar.registerButton('strike', require('./mdex/buttons/strike'));
+Mdex.Toolbar.registerButton('preview', require('./mdex/buttons/preview'));
 
 
-},{"./mdex/buttons/_base/button":2,"./mdex/buttons/blockquote":3,"./mdex/buttons/bold":4,"./mdex/buttons/italic":5,"./mdex/buttons/ordered-list":6,"./mdex/buttons/strike":7,"./mdex/buttons/unordered-list":8,"./mdex/editor":9,"./mdex/toolbar":10,"./mdex/utils":11}],2:[function(require,module,exports){
+},{"./mdex/buttons/_base/button":2,"./mdex/buttons/blockquote":3,"./mdex/buttons/bold":4,"./mdex/buttons/italic":5,"./mdex/buttons/ordered-list":6,"./mdex/buttons/preview":7,"./mdex/buttons/strike":8,"./mdex/buttons/unordered-list":9,"./mdex/editor":10,"./mdex/toolbar":11,"./mdex/utils":12}],2:[function(require,module,exports){
 var Button,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -163,6 +165,43 @@ module.exports = OrderedList = (function(_super) {
 
 
 },{"./_base/button":2}],7:[function(require,module,exports){
+var Button, Preview,
+  __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+Button = require('./_base/button');
+
+module.exports = Preview = (function(_super) {
+  __extends(Preview, _super);
+
+  function Preview() {
+    this.onClick = __bind(this.onClick, this);
+    return Preview.__super__.constructor.apply(this, arguments);
+  }
+
+  Preview.prototype.template = '\>-\<';
+
+  Preview.prototype.onClick = function(editor) {
+    var $mdex, $preview, parent;
+    parent = editor.parent;
+    $preview = parent.$('.preview-container');
+    $mdex = parent.$('.mdex-editor-container');
+    if ($preview.is(':visible')) {
+      $preview.hide();
+      return $mdex.width('100%');
+    } else {
+      $preview.show();
+      return $mdex.width('60%');
+    }
+  };
+
+  return Preview;
+
+})(Button);
+
+
+},{"./_base/button":2}],8:[function(require,module,exports){
 var Button, Strike,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -185,7 +224,7 @@ module.exports = Strike = (function(_super) {
 })(Button);
 
 
-},{"./_base/button":2}],8:[function(require,module,exports){
+},{"./_base/button":2}],9:[function(require,module,exports){
 var Button, UnorderedList,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -208,7 +247,7 @@ module.exports = UnorderedList = (function(_super) {
 })(Button);
 
 
-},{"./_base/button":2}],9:[function(require,module,exports){
+},{"./_base/button":2}],10:[function(require,module,exports){
 var Editor, Toolbar;
 
 Toolbar = require('./toolbar');
@@ -271,7 +310,7 @@ module.exports = Editor = (function() {
 })();
 
 
-},{"./toolbar":10}],10:[function(require,module,exports){
+},{"./toolbar":11}],11:[function(require,module,exports){
 var Button, Toolbar, createSep;
 
 if (Mdex.Buttons == null) {
@@ -338,7 +377,7 @@ module.exports = Toolbar = (function() {
 })();
 
 
-},{"./buttons/_base/button":2}],11:[function(require,module,exports){
+},{"./buttons/_base/button":2}],12:[function(require,module,exports){
 var getState, setLine, wrapTextWith, _replaceSelection, _toggleLine;
 
 getState = Mdex.getState = function(cm, pos) {
