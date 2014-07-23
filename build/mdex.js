@@ -1,32 +1,32 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+!function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.Mdex=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 window.Mdex = {};
 
-require('./mdex/utils');
+_dereq_('./mdex/utils');
 
-Mdex.Toolbar = require('./mdex/toolbar');
+Mdex.Toolbar = _dereq_('./mdex/toolbar');
 
-Mdex.Editor = require('./mdex/editor');
+Mdex.Editor = _dereq_('./mdex/editor');
 
-Mdex.Button = require('./mdex/buttons/_base/button');
+Mdex.Button = _dereq_('./mdex/buttons/_base/button');
 
-Mdex.Toolbar.registerButton('bold', require('./mdex/buttons/bold'));
+Mdex.Toolbar.registerButton('bold', _dereq_('./mdex/buttons/bold'));
 
-Mdex.Toolbar.registerButton('italic', require('./mdex/buttons/italic'));
+Mdex.Toolbar.registerButton('italic', _dereq_('./mdex/buttons/italic'));
 
-Mdex.Toolbar.registerButton('strike', require('./mdex/buttons/strike'));
+Mdex.Toolbar.registerButton('strike', _dereq_('./mdex/buttons/strike'));
 
-Mdex.Toolbar.registerButton('blockquote', require('./mdex/buttons/blockquote'));
+Mdex.Toolbar.registerButton('blockquote', _dereq_('./mdex/buttons/blockquote'));
 
-Mdex.Toolbar.registerButton('unordered-list', require('./mdex/buttons/unordered-list'));
+Mdex.Toolbar.registerButton('unordered-list', _dereq_('./mdex/buttons/unordered-list'));
 
-Mdex.Toolbar.registerButton('ordered-list', require('./mdex/buttons/ordered-list'));
+Mdex.Toolbar.registerButton('ordered-list', _dereq_('./mdex/buttons/ordered-list'));
 
-Mdex.Toolbar.registerButton('preview', require('./mdex/buttons/preview'));
+Mdex.Toolbar.registerButton('preview', _dereq_('./mdex/buttons/preview'));
 
 module.exports = Mdex;
 
 
-},{"./mdex/buttons/_base/button":2,"./mdex/buttons/blockquote":3,"./mdex/buttons/bold":4,"./mdex/buttons/italic":5,"./mdex/buttons/ordered-list":6,"./mdex/buttons/preview":7,"./mdex/buttons/strike":8,"./mdex/buttons/unordered-list":9,"./mdex/editor":10,"./mdex/toolbar":11,"./mdex/utils":12}],2:[function(require,module,exports){
+},{"./mdex/buttons/_base/button":2,"./mdex/buttons/blockquote":3,"./mdex/buttons/bold":4,"./mdex/buttons/italic":5,"./mdex/buttons/ordered-list":6,"./mdex/buttons/preview":7,"./mdex/buttons/strike":8,"./mdex/buttons/unordered-list":9,"./mdex/editor":10,"./mdex/toolbar":11,"./mdex/utils":12}],2:[function(_dereq_,module,exports){
 var Button,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -74,12 +74,12 @@ module.exports = Button = (function(_super) {
 })(Bn.View);
 
 
-},{}],3:[function(require,module,exports){
+},{}],3:[function(_dereq_,module,exports){
 var Blockquote, Button,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-Button = require('./_base/button');
+Button = _dereq_('./_base/button');
 
 module.exports = Blockquote = (function(_super) {
   __extends(Blockquote, _super);
@@ -97,12 +97,12 @@ module.exports = Blockquote = (function(_super) {
 })(Button);
 
 
-},{"./_base/button":2}],4:[function(require,module,exports){
+},{"./_base/button":2}],4:[function(_dereq_,module,exports){
 var Bold, Button,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-Button = require('./_base/button');
+Button = _dereq_('./_base/button');
 
 module.exports = Bold = (function(_super) {
   __extends(Bold, _super);
@@ -120,12 +120,12 @@ module.exports = Bold = (function(_super) {
 })(Button);
 
 
-},{"./_base/button":2}],5:[function(require,module,exports){
+},{"./_base/button":2}],5:[function(_dereq_,module,exports){
 var Button, Italic,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-Button = require('./_base/button');
+Button = _dereq_('./_base/button');
 
 module.exports = Italic = (function(_super) {
   __extends(Italic, _super);
@@ -143,12 +143,12 @@ module.exports = Italic = (function(_super) {
 })(Button);
 
 
-},{"./_base/button":2}],6:[function(require,module,exports){
+},{"./_base/button":2}],6:[function(_dereq_,module,exports){
 var Button, OrderedList,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-Button = require('./_base/button');
+Button = _dereq_('./_base/button');
 
 module.exports = OrderedList = (function(_super) {
   __extends(OrderedList, _super);
@@ -166,13 +166,13 @@ module.exports = OrderedList = (function(_super) {
 })(Button);
 
 
-},{"./_base/button":2}],7:[function(require,module,exports){
+},{"./_base/button":2}],7:[function(_dereq_,module,exports){
 var Button, Preview,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-Button = require('./_base/button');
+Button = _dereq_('./_base/button');
 
 module.exports = Preview = (function(_super) {
   __extends(Preview, _super);
@@ -203,12 +203,12 @@ module.exports = Preview = (function(_super) {
 })(Button);
 
 
-},{"./_base/button":2}],8:[function(require,module,exports){
+},{"./_base/button":2}],8:[function(_dereq_,module,exports){
 var Button, Strike,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-Button = require('./_base/button');
+Button = _dereq_('./_base/button');
 
 module.exports = Strike = (function(_super) {
   __extends(Strike, _super);
@@ -226,12 +226,12 @@ module.exports = Strike = (function(_super) {
 })(Button);
 
 
-},{"./_base/button":2}],9:[function(require,module,exports){
+},{"./_base/button":2}],9:[function(_dereq_,module,exports){
 var Button, UnorderedList,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-Button = require('./_base/button');
+Button = _dereq_('./_base/button');
 
 module.exports = UnorderedList = (function(_super) {
   __extends(UnorderedList, _super);
@@ -249,10 +249,10 @@ module.exports = UnorderedList = (function(_super) {
 })(Button);
 
 
-},{"./_base/button":2}],10:[function(require,module,exports){
+},{"./_base/button":2}],10:[function(_dereq_,module,exports){
 var Editor, Toolbar;
 
-Toolbar = require('./toolbar');
+Toolbar = _dereq_('./toolbar');
 
 module.exports = Editor = (function() {
   function Editor(_arg) {
@@ -312,7 +312,7 @@ module.exports = Editor = (function() {
 })();
 
 
-},{"./toolbar":11}],11:[function(require,module,exports){
+},{"./toolbar":11}],11:[function(_dereq_,module,exports){
 var Button, Toolbar, createSep;
 
 if (Mdex.Buttons == null) {
@@ -327,7 +327,7 @@ createSep = function() {
   return el;
 };
 
-Button = require('./buttons/_base/button');
+Button = _dereq_('./buttons/_base/button');
 
 module.exports = Toolbar = (function() {
   Toolbar.registerButton = function(name, buttonClass) {
@@ -379,7 +379,7 @@ module.exports = Toolbar = (function() {
 })();
 
 
-},{"./buttons/_base/button":2}],12:[function(require,module,exports){
+},{"./buttons/_base/button":2}],12:[function(_dereq_,module,exports){
 var getState, setLine, wrapTextWith, _replaceSelection, _toggleLine;
 
 getState = Mdex.getState = function(cm, pos) {
@@ -553,3 +553,5 @@ _toggleLine = function(cm, name) {
 
 
 },{}]},{},[1])
+(1)
+});
