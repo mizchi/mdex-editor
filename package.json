@@ -2,7 +2,7 @@
   "family": "mdex",
   "name": "mdex",
   "main": "build/mdex.js",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "repository": {
     "type": "git",
     "url": "https://github.com/mizchi/mdex.git"
