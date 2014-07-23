@@ -1,6 +1,7 @@
 {
   "name": "mdex-editor",
-  "version": "0.0.1",
+  "main": "build/mdex.js",
+  "version": "0.1.5",
   "homepage": "https://github.com/mizchi/mdex-editor",
   "authors": [
     "Koutarou Chikuba <miz404@gmail.com>"
