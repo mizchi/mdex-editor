@@ -23,6 +23,8 @@ Mdex.Toolbar.registerButton('ordered-list', require('./mdex/buttons/ordered-list
 
 Mdex.Toolbar.registerButton('preview', require('./mdex/buttons/preview'));
 
+module.exports = Mdex;
+
 
 },{"./mdex/buttons/_base/button":2,"./mdex/buttons/blockquote":3,"./mdex/buttons/bold":4,"./mdex/buttons/italic":5,"./mdex/buttons/ordered-list":6,"./mdex/buttons/preview":7,"./mdex/buttons/strike":8,"./mdex/buttons/unordered-list":9,"./mdex/editor":10,"./mdex/toolbar":11,"./mdex/utils":12}],2:[function(require,module,exports){
 var Button,
