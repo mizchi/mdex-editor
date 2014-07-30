@@ -1,0 +1,16 @@
+{
+  "name": "bony",
+  "version": "0.0.1",
+  "main": "dist/bony.js",
+  "authors": [
+    "Koutarou Chikuba <miz404@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "bony",
+  "main": "dist/bony.js",
+  "authors": [
+    "Koutarou Chikuba <miz404@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "homepage": "https://github.com/mizchi/bony",
+  "_release": "89c082a264",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "89c082a264646ac87cacbbfc7bae8a020a84833c"
+  },
+  "_source": "git://github.com/mizchi/bony.git",
+  "_target": "master",
+  "_originalSource": "mizchi/bony"
+}

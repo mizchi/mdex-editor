@@ -16,7 +16,7 @@
   ],
   "devDependencies": {
     "codemirror": "~4.3.0",
-    "marked": "~0.3.2",
-    "icomoon": "~0.0.1"
+    "bony": "mizchi/bony#master",
+    "marked": "~0.3.2"
   }
 }

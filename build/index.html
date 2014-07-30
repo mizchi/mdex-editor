@@ -43,20 +43,11 @@
           console.log('hello');
         }
       }
-      var editor = new Mdex({
-				container: '.mdex-container'
+      var editor = new Mdex.Editor({
+				container: '.mdex-container',
         toolbar: [
-          {name: 'bold',           action: Mdex.toggleBold},
-          {name: 'italic',         action: Mdex.toggleItalic},
-          '|',
-          {name: 'quote',          action: Mdex.toggleBlockquote},
-          {name: 'unordered-list', action: Mdex.toggleUnOrderedList},
-          {name: 'ordered-list',   action: Mdex.toggleOrderedList},
-          '|',
-          {name: 'link',           action: Mdex.drawLink},
-          {name: 'image',          action: Mdex.drawImage},
-          '|',
-          myButton
+          'bold',
+          'italic'
         ]
       });
       editor.render();

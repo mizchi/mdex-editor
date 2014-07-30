@@ -1,0 +1,17 @@
+{
+  "name": "bony",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "browserify": "^4.1.11",
+    "coffee-script": "^1.7.1",
+    "coffeeify": "^0.6.0",
+    "uglify-js": "^2.4.14"
+  }
+}

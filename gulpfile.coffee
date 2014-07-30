@@ -30,6 +30,7 @@ gulp.task 'default', ['concat-js', 'coffee']
 
 gulp.task 'concat-js', ->
   gulp.src [
+    './bower_components/bony/dist/bony.js'
     './bower_components/marked/lib/marked.js'
     './bower_components/codemirror/lib/codemirror.js'
     './bower_components/codemirror/addon/edit/continuelist.js'
